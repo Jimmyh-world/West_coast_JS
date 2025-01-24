@@ -1,0 +1,348 @@
+/* Modern CSS Reset and Base Styles */
+:root {
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-secondary: #64748b;
+  --color-background: #f8fafc;
+  --color-text: #334155;
+  --color-text-light: #94a3b8;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Navigation Styles */
+.navbar {
+  background-color: white;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 4rem;
+}
+
+.nav-brand {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.nav-brand a {
+  text-decoration: none;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-menu {
+  display: none;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-menu.active {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 4rem;
+  left: 0;
+  right: 0;
+  background-color: white;
+  padding: 1rem;
+  box-shadow: var(--shadow-md);
+}
+
+.nav-menu a {
+  text-decoration: none;
+  color: var(--color-text);
+  padding: 0.5rem 1rem;
+  transition: color 0.2s;
+}
+
+.nav-menu a:hover {
+  color: var(--color-primary);
+}
+
+.mobile-menu-btn {
+  display: block;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.mobile-menu-btn span {
+  display: block;
+  width: 25px;
+  height: 2px;
+  background-color: var(--color-text);
+  margin: 5px 0;
+  transition: 0.3s;
+}
+
+/* Hero Section */
+.hero {
+  padding: 4rem 0;
+  text-align: center;
+  background: linear-gradient(to bottom, #ffffff, var(--color-background));
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  color: var(--color-text-light);
+  margin-bottom: 2rem;
+}
+
+/* Course Grid */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 2rem 0;
+}
+
+.course-card {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.course-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.btn-secondary {
+  background-color: white;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-background);
+}
+
+/* Course Search */
+.course-search {
+  padding: 3rem 0;
+  background-color: white;
+}
+
+.search-container {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-container input,
+.search-container select {
+  padding: 0.75rem;
+  border: 1px solid var(--color-text-light);
+  border-radius: 0.375rem;
+  flex: 1;
+}
+
+/* Course card styles */
+.course-card {
+  /* Maintain existing card styles */
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* This ensures the image doesn't spill out of rounded corners */
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Image container to maintain consistent dimensions */
+.course-card .course-image {
+  position: relative;
+  width: 100%;
+  height: 200px; /* Fixed height for consistency */
+  overflow: hidden; /* Ensures image doesn't overflow container */
+  background-color: #f5f5f5; /* Light background for images that are loading */
+}
+
+/* Image styling for perfect fit */
+.course-card .course-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* This makes the image cover the area without distortion */
+  object-position: center; /* Centers the image within its container */
+  transition: transform 0.3s ease; /* Smooth zoom effect on hover */
+}
+
+/* Optional: Add a subtle zoom effect on hover */
+.course-card:hover .course-image img {
+  transform: scale(1.05);
+}
+
+/* Content area padding */
+.course-card .course-content {
+  padding: 1.5rem;
+}
+
+/* Make sure text content has proper spacing */
+.course-card h3 {
+  margin: 0 0 0.5rem 0;
+  color: #2d3748; /* Dark gray for readability */
+}
+
+.course-number {
+  font-size: 0.875rem;
+  color: #718096;
+  margin-bottom: 0.5rem;
+}
+
+.course-description {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.course-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.course-rating {
+  color: #fbbf24;
+  font-weight: 500;
+}
+
+.course-price {
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.course-types {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge-classroom {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+.badge-distance {
+  background-color: #f0fdf4;
+  color: #166534;
+}
+
+.badge-ondemand {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.error-message {
+  text-align: center;
+  padding: 2rem;
+  color: #dc2626;
+  background: #fee2e2;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+/* Footer */
+footer {
+  background-color: white;
+  padding: 4rem 0 2rem;
+  margin-top: 4rem;
+  border-top: 1px solid var(--color-text-light);
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+/* Media Queries */
+@media (min-width: 768px) {
+  .mobile-menu-btn {
+    display: none;
+  }
+
+  .nav-menu {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .footer-content {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .hero h1 {
+    font-size: 3.5rem;
+  }
+}
+
+@media (min-width: 1200px) {
+  .container {
+    padding: 0 2rem;
+  }
+}

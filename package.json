@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "json-server --watch data/db.json",
-    "dev": "live-server --port=8080 --entry-file=src/index.html"
+    "dev": "live-server --config=live-server.config.js"
   },
   "repository": {
     "type": "git",

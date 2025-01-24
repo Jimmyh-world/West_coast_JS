@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WestCoast Education</title>
+    <link rel="stylesheet" href="./src/css/styles.css">
+    <!-- Defer loading of our main JavaScript module -->
+    <script type="module" src="./src/js/main.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <a href="index.html">
+                        <span class="icon">📚</span>
+                        WestCoast Education
+                    </a>
+                </div>
+
+                <button class="mobile-menu-btn" aria-label="Toggle navigation menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="on-demand.html">On-Demand</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="login.html" class="btn-login">Sign In</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>Advance Your Tech Career</h1>
+                <p>Industry-leading courses in web development and mobile solutions</p>
+                <div class="hero-buttons">
+                    <a href="courses.html" class="btn btn-primary">Browse Courses</a>
+                    <a href="on-demand.html" class="btn btn-secondary">View On-Demand Content</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Courses Section -->
+        <section class="featured-courses">
+            <div class="container">
+                <h2>Featured Courses</h2>
+                <!-- This is the container that our JavaScript will populate -->
+                <div id="course-list" class="course-grid">
+                    <!-- Courses will be dynamically inserted here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Course Search Section -->
+        <section class="course-search">
+            <div class="container">
+                <h2>Find Your Next Course</h2>
+                <div class="search-container">
+                    <input type="text" id="courseSearch" placeholder="Search courses...">
+                    <select id="courseFilter">
+                        <option value="">All Types</option>
+                        <option value="classroom">Classroom</option>
+                        <option value="distance">Distance</option>
+                        <option value="ondemand">On-Demand</option>
+                    </select>
+                    <button class="btn btn-primary">Search</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>WestCoast Education</h3>
+                    <p>Leading tech education for over 40 years</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="courses.html">All Courses</a></li>
+                        <li><a href="schedule.html">Course Schedule</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>Email: info@westcoast.edu</p>
+                    <p>Phone: (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 WestCoast Education. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
