@@ -1,0 +1,24 @@
+{
+  "courses": [
+    {
+      "id": "1",
+      "title": "Modern Web Development",
+      "courseNumber": "WD101",
+      "durationDays": 5,
+      "deliveryMethods": {
+        "classroom": true,
+        "distance": true
+      },
+      "image": "/images/web-dev.jpg",
+      "scheduledDates": [
+        {
+          "startDate": "2025-02-15",
+          "format": "classroom",
+          "availableSeats": 15
+        }
+      ]
+    }
+  ],
+  "users": [],
+  "bookings": []
+}

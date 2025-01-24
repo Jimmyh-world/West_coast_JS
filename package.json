@@ -1,0 +1,26 @@
+{
+  "name": "west_coast_js",
+  "version": "1.0.0",
+  "description": "Individual assignment for front-end Javascript course",
+  "main": "src/js/main.js",
+  "type": "module",
+  "scripts": {
+    "start": "json-server --watch data/db.json",
+    "dev": "live-server --port=8080 --entry-file=src/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jimmyh-world/West_coast_JS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jimmyh-world/West_coast_JS/issues"
+  },
+  "homepage": "https://github.com/Jimmyh-world/West_coast_JS#readme",
+  "devDependencies": {
+    "json-server": "^1.0.0-beta.3",
+    "live-server": "^1.2.0"
+  }
+}
