@@ -5,12 +5,10 @@ import { getCourses } from '../api/courseServices.js';
 
 // Helper function to safely handle image paths
 function getImagePath(imagePath) {
-  // Check if image path starts with http/https
   if (imagePath?.startsWith('http')) {
     return imagePath;
   }
-  // Otherwise, use a relative path from our public directory
-  return `../src/images/placeholder.webp`;
+  return `/src/images/${imagePath}` || '/src/images/placeholder.webp';
 }
 
 // Function to create HTML for a single course
@@ -52,7 +50,7 @@ function createCourseElement(course) {
                     }
                     ${
                       deliveryMethods.distance
-                        ? '<span class="badge badge-distance">Distance</span>'
+                        ? '<span class="badge badge-distance">on-demand</span>'
                         : ''
                     }
                 </div>

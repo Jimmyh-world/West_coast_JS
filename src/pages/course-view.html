@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courses - WestCoast Education</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <!-- <script type="module" src="../js/main.js" defer></script> -->
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <a href="../../index.html">
+                        <span class="icon">📚</span>
+                        WestCoast Education
+                    </a>
+                </div>
+
+                <button class="mobile-menu-btn" aria-label="Toggle navigation menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+
+                <ul class="nav-menu">
+                    <li><a href="../../index.html" class="active">Home</a></li>
+                    <li><a href="course-view.html">Courses</a></li>
+                    <li><a href="course-view.html?view=ondemand">On-Demand</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="login.html" class="btn-login">Sign In</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Dynamic Page Title -->
+        <section class="page-header">
+            <div class="container">
+                <h1 id="pageTitle">Courses</h1>
+                <p id="pageDescription">Browse our available courses</p>
+            </div>
+        </section>
+
+        <!-- Filters Section -->
+        <section class="filters-section" id="filtersSection">
+            <div class="container">
+                <div class="search-filters">
+                    <input type="text" id="searchInput" placeholder="Search courses...">
+                    <select id="deliveryFilter">
+                        <option value="">All Formats</option>
+                        <option value="classroom">Classroom</option>
+                        <option value="ondemand">On-Demand</option>
+                    </select>
+                    <button class="btn btn-primary" id="searchButton">Search</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Course Content Section -->
+        <section class="course-content">
+            <div class="container">
+                <!-- For course listings -->
+                <div id="courseGrid" class="course-grid"></div>
+
+                <!-- For single course detail -->
+                <div id="courseDetail" class="course-detail"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>WestCoast Education</h3>
+                    <p>Leading tech education for over 40 years</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="course-view.html">All Courses</a></li>
+                        <li><a href="course-view.html?view=ondemand">On-Demand</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>Email: info@westcoast.edu</p>
+                    <p>Phone: +46 7123-4567</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 WestCoast Education. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- <script type="module" src="/src/js/main.js"></script> -->
+</body>
+
+</html>

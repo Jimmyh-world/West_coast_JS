@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WestCoast Education</title>
     <link rel="stylesheet" href="./src/css/styles.css">
-    <!-- Defer loading of our main JavaScript module -->
     <script type="module" src="./src/js/main.js" defer></script>
 </head>
 
@@ -29,11 +28,11 @@
 
                 <ul class="nav-menu">
                     <li><a href="index.html" class="active">Home</a></li>
-                    <li><a href="courses.html">Courses</a></li>
-                    <li><a href="on-demand.html">On-Demand</a></li>
-                    <li><a href="about.html">About</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                    <li><a href="login.html" class="btn-login">Sign In</a></li>
+                    <li><a href="src/pages/course-view.html">Courses</a></li>
+                    <li><a href="src/pages/course-view.html?view=ondemand">On-Demand</a></li>
+                    <li><a href="src/pages/about.html">About</a></li>
+                    <li><a href="src/pages/contact.html">Contact</a></li>
+                    <li><a href="src/pages/login.html" class="btn-login">Sign In</a></li>
                 </ul>
             </div>
         </nav>
@@ -46,8 +45,9 @@
                 <h1>Advance Your Tech Career</h1>
                 <p>Industry-leading courses in web development and mobile solutions</p>
                 <div class="hero-buttons">
-                    <a href="courses.html" class="btn btn-primary">Browse Courses</a>
-                    <a href="on-demand.html" class="btn btn-secondary">View On-Demand Content</a>
+                    <a href="src/pages/course-view.html" class="btn btn-primary">Browse Courses</a>
+                    <a href="src/pages/course-view.html?view=ondemand" class="btn btn-secondary">View On-Demand
+                        Content</a>
                 </div>
             </div>
         </section>
@@ -56,7 +56,6 @@
         <section class="featured-courses">
             <div class="container">
                 <h2>Featured Courses</h2>
-                <!-- This is the container that our JavaScript will populate -->
                 <div id="course-list" class="course-grid">
                     <!-- Courses will be dynamically inserted here -->
                 </div>
@@ -72,7 +71,6 @@
                     <select id="courseFilter">
                         <option value="">All Types</option>
                         <option value="classroom">Classroom</option>
-                        <option value="distance">Distance</option>
                         <option value="ondemand">On-Demand</option>
                     </select>
                     <button class="btn btn-primary">Search</button>
@@ -91,15 +89,15 @@
                 <div class="footer-section">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="courses.html">All Courses</a></li>
-                        <li><a href="schedule.html">Course Schedule</a></li>
-                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="src/pages/course-view.html">All Courses</a></li>
+                        <li><a href="src/pages/course-view.html?view=ondemand">On-Demand</a></li>
+                        <li><a href="src/pages/contact.html">Contact Us</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Contact</h3>
                     <p>Email: info@westcoast.edu</p>
-                    <p>Phone: (555) 123-4567</p>
+                    <p>Phone: +46 7123-4567</p>
                 </div>
             </div>
             <div class="footer-bottom">
