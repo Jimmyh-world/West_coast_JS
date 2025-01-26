@@ -1,17 +1,21 @@
+// live-server.config.js
 module.exports = {
-  port: 8080, // This matches your current setup
-  root: './', // Serve from project root
-  open: true, // Open browser automatically
-  file: 'src/index.html', // Your entry point
-  wait: 1000, // Wait for all changes
-  mount: [['/node_modules', './node_modules']], // Mount node_modules
-  logLevel: 2, // Show all logs
+  port: 8080,
+  root: './',
+  open: true,
+  file: 'index.html',
+  wait: 1000,
+  mount: [['/node_modules', './node_modules']],
   middleware: [
     function (req, res, next) {
-      // Ensure correct MIME type for JavaScript modules
+      // Fix MIME type issues
       if (req.url.endsWith('.js')) {
-        res.setHeader('Content-Type', 'application/javascript');
+        res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
       }
+      // Add proper CORS headers
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
       next();
     },
   ],

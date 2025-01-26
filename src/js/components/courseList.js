@@ -1,121 +1,73 @@
 // src/js/components/courseList.js
-
-// First, import the getCourses function from our services
 import { getCourses } from '../api/courseServices.js';
 
-// Helper function to safely handle image paths
-function getImagePath(imagePath) {
-  if (imagePath?.startsWith('http')) {
-    return imagePath;
-  }
-  return `/src/images/${imagePath}` || '/src/images/placeholder.webp';
-}
-
-// Function to create HTML for a single course
-function createCourseElement(course) {
-  // First, destructure the course object with default values
-  const {
-    id,
-    title = 'Course Title Not Available',
-    courseNumber = 'No Course Number',
-    durationDays = 0,
-    deliveryMethods = {},
-    scheduledDates = [],
-    image = null,
-  } = course;
-
-  // Safely handle date and seats display
-  const nextSession = scheduledDates[0] || {};
-  const startDate = nextSession.startDate
-    ? new Date(nextSession.startDate).toLocaleDateString()
-    : 'Date TBD';
-  const seats = nextSession.availableSeats ?? 'TBD';
-
+function createCourseCard(course) {
   return `
-        <article class="course-card">
-            <div class="course-image">
-                <img src="${getImagePath(image)}" 
-                     alt="${title}"
-                     onerror="this.onerror=null; this.src='/images/placeholder.jpg';">
-            </div>
-            <div class="course-content">
-                <h3 class="course-title">${title}</h3>
-                <p class="course-number">Course: ${courseNumber}</p>
-                <p class="duration">${durationDays} days</p>
-                <div class="delivery-methods">
-                    ${
-                      deliveryMethods.classroom
-                        ? '<span class="badge badge-classroom">Classroom</span>'
-                        : ''
-                    }
-                    ${
-                      deliveryMethods.distance
-                        ? '<span class="badge badge-distance">on-demand</span>'
-                        : ''
-                    }
-                </div>
-                <div class="course-details">
-                    <p>Next Start: ${startDate}</p>
-                    <p>Available Seats: ${seats}</p>
-                </div>
-                <button class="btn btn-primary" onclick="handleCourseClick(${id})">
-                    Learn More
-                </button>
-            </div>
-        </article>
-    `;
+    <article class="course-card">
+      <div class="course-image">
+        ${
+          course.image && course.image.trim()
+            ? `<img src="/src/images/${course.image}" alt="${course.title}" 
+              onerror="this.src='/src/images/placeholder.webp'">`
+            : `<img src="/src/images/placeholder.webp" alt="${course.title}">`
+        }
+      </div>
+      <div class="course-content">
+        <h3>${course.title}</h3>
+        <p class="tagline">${course.tagLine}</p>
+        <div class="delivery-methods">
+          ${
+            course.deliveryMethods.classroom
+              ? '<span class="badge badge-classroom">Classroom</span>'
+              : ''
+          }
+          ${
+            course.deliveryMethods.distance
+              ? '<span class="badge badge-distance">Distance</span>'
+              : ''
+          }
+        </div>
+        <p class="duration">${course.durationDays} days</p>
+        <a href="/src/pages/course-details.html?id=${course.id}" 
+           class="btn btn-primary">Learn More</a>
+      </div>
+    </article>
+  `;
 }
 
-// Main function to display courses
-export async function displayCourses(containerId = 'course-list') {
+export async function displayCourses(containerId, options = {}) {
+  const { limit, filter } = options;
+
   try {
-    console.log('Starting displayCourses function...'); // Debug log
-
     const container = document.getElementById(containerId);
-    if (!container) {
-      throw new Error(`Container with id '${containerId}' not found`);
-    }
+    if (!container) throw new Error(`Container ${containerId} not found`);
 
-    // Show loading state
-    container.innerHTML = '<p class="loading">Loading courses...</p>';
-
-    // Fetch courses
+    container.innerHTML = '<p>Loading courses...</p>';
     const courses = await getCourses();
-    console.log('Fetched courses:', courses); // Debug log
+    let filteredCourses = courses;
 
-    if (!courses || courses.length === 0) {
-      container.innerHTML = '<p class="no-courses">No courses available.</p>';
-      return;
+    if (filter === 'classroom') {
+      filteredCourses = courses.filter(
+        (course) => course.deliveryMethods.classroom
+      );
+    } else if (filter === 'distance') {
+      filteredCourses = courses.filter(
+        (course) => course.deliveryMethods.distance
+      );
     }
 
-    // Clear container and add courses
-    container.innerHTML = '';
-    courses.forEach((course) => {
-      container.insertAdjacentHTML('beforeend', createCourseElement(course));
-    });
+    if (limit) {
+      filteredCourses = filteredCourses.slice(0, limit);
+    }
 
-    console.log('Courses displayed successfully');
+    container.innerHTML = filteredCourses.map(createCourseCard).join('');
   } catch (error) {
-    console.error('Error in displayCourses:', error);
-
-    // Find somewhere to display the error
-    const container =
-      document.getElementById(containerId) ||
-      document.querySelector('.featured-courses') ||
-      document.body;
-
-    container.innerHTML = `
-            <div class="error-message">
-                Failed to load courses. Please try again later.
-                <br>
-                <small>${error.message}</small>
-            </div>
-        `;
+    console.error('Error displaying courses:', error);
+    if (container) {
+      container.innerHTML =
+        '<div class="error-message">Failed to load courses</div>';
+    }
   }
 }
 
-// Global handler for course clicks
-window.handleCourseClick = (courseId) => {
-  console.log('Course clicked:', courseId);
-  // Add your course click handling logic here
-};
+export { createCourseCard };
