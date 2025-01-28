@@ -206,7 +206,6 @@ About (about.html)
 Contact (contact.html)
 Login (login.html)
 
-
 Created responsive navigation with mobile support
 Implemented consistent header and footer across all pages
 
@@ -220,7 +219,6 @@ Delivery method badges (Classroom/Distance)
 Course duration and details
 Dynamic "Learn More" links
 
-
 Created filter system for course type selection
 
 3. Course Details Implementation
@@ -233,8 +231,6 @@ Course header with image
 Course metadata (number, duration)
 Session availability
 Booking interface
-
-
 
 4. API Integration
 
@@ -252,3 +248,169 @@ Technical Improvements:
 - Implemented loading states for better UX
 - Added dynamic metadata updates for course information
 - Created responsive layouts for all screen sizes
+
+### Step 3: Search, Filtering, Refactoring and Responsive UI
+
+Our third development phase focused on implementing robust search functionality, refactoring the codebase for better maintainability, and enhancing the responsive design. This phase represents a significant improvement in both user experience and code organization.
+
+#### Updated Project Structure
+
+```plaintext
+project-root/
+  ├── src/
+  │   ├── js/
+  │   │   ├── api/                # API and data services
+  │   │   │   ├── apiClient.js    # Core API functionality
+  │   │   │   └── courseServices.js # Course-specific API calls
+  │   │   ├── components/         # Reusable UI components
+  │   │   │   ├── courseList.js   # Course grid/list display
+  │   │   │   ├── course-details.js # Individual course view
+  │   │   │   └── navigation.js   # Site navigation
+  │   │   ├── utilities/          # Shared utilities
+  │   │   │   ├── courseUtils.js  # Course-specific helpers
+  │   │   │   ├── eventHandler.js # Event management
+  │   │   │   └── search.js      # Search functionality
+  │   │   ├── pages/             # Page-specific JS
+  │   │   │   └── courseDetails.js
+  │   │   └── main.js            # Application entry point
+  │   └── css/
+  │       └── styles.css         # Global styles
+```
+
+#### Search Implementation
+
+1. **Advanced Search Engine**
+
+   ```javascript
+   // Example from utilities/search.js
+   handleSearch() {
+     const searchTerm = this.searchInput.value.toLowerCase();
+     const filterType = this.filterSelect.value;
+
+     let results = this.courses.filter((course) => {
+       const matchesSearch =
+         course.title.toLowerCase().includes(searchTerm) ||
+         course.keyWords.toLowerCase().includes(searchTerm) ||
+         course.discription.toLowerCase().includes(searchTerm);
+
+       const matchesFilter =
+         filterType === '' ||
+         (filterType === 'classroom' && course.deliveryMethods.classroom) ||
+         (filterType === 'ondemand' && course.deliveryMethods.distance);
+
+       return matchesSearch && matchesFilter;
+     });
+   }
+   ```
+
+2. **Event Management System**
+   ```javascript
+   // Example from utilities/eventHandler.js
+   export const eventHandler = {
+     listeners: new Map(),
+     on(element, eventType, callback, options = {}) {
+       const handler = (event) => callback(event);
+       element.addEventListener(eventType, handler, options);
+       const key = `${eventType}-${Date.now()}`;
+       this.listeners.set(key, { element, eventType, handler });
+       return key;
+     },
+   };
+   ```
+
+#### Code Organization & Refactoring
+
+1. **API Layer Abstraction**
+
+   - Centralized API client with error handling
+   - Service-based architecture for data operations
+   - Consistent error handling patterns
+
+2. **Component Architecture**
+
+   - Modular component structure
+   - Clear separation of concerns
+   - Reusable utility functions
+
+3. **Event Handling**
+   - Centralized event management
+   - Automatic event cleanup
+   - Memory leak prevention
+
+#### Responsive Design Implementation
+
+1. **Mobile-First Approach**
+
+   ```css
+   /* Base styles for mobile */
+   .course-grid {
+     display: grid;
+     grid-template-columns: 1fr;
+     gap: 2rem;
+   }
+
+   /* Tablet and desktop adjustments */
+   @media (min-width: 768px) {
+     .course-grid {
+       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+     }
+   }
+   ```
+
+2. **Flexible Components**
+
+   - Responsive navigation menu
+   - Adaptive course cards
+   - Dynamic search interface
+   - Flexible grid system
+
+3. **Performance Optimizations**
+   - Image lazy loading
+   - Event delegation
+   - Efficient DOM updates
+
+#### Key Features
+
+1. **Search Functionality**
+
+   - Real-time filtering
+   - Multiple search criteria
+   - Type-ahead suggestions
+   - Filter persistence
+
+2. **UI Improvements**
+
+   - Enhanced accessibility
+   - Consistent typography
+   - Responsive images
+   - Loading states
+
+3. **Code Quality**
+   - ES6 module system
+   - Consistent error handling
+   - Type checking
+   - Performance monitoring
+
+#### Technical Highlights
+
+1. **Search Engine**
+
+   - Keyword-based searching
+   - Multiple filter support
+   - Results highlighting
+   - Search history
+
+2. **Event System**
+
+   - Event delegation pattern
+   - Automatic cleanup
+   - Performance optimization
+   - Error boundary implementation
+
+3. **Component Architecture**
+   - Modular design
+   - State management
+   - Props validation
+   - Lifecycle management
+
+This phase significantly improved the application's usability and maintainability while setting up a solid foundation for future enhancements.
