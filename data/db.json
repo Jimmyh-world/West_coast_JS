@@ -7,6 +7,7 @@
       "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
       "courseNumber": "WD101",
       "durationDays": 20,
+      "keyWords": "HTML, CSS, Javascript, frontend, backend, react",
       "deliveryMethods": {
         "classroom": true,
         "distance": true
@@ -27,6 +28,7 @@
       "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
       "courseNumber": "R102",
       "durationDays": 5,
+      "keyWords": "HTML, CSS, Javascript, frontend, react, typescript",
       "deliveryMethods": {
         "classroom": true,
         "distance": false
@@ -47,6 +49,7 @@
       "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
       "courseNumber": "BE101",
       "durationDays": 10,
+      "keyWords": "node.js, database, api, Javascript, backend, typescript",
       "deliveryMethods": {
         "classroom": true,
         "distance": false
@@ -67,6 +70,7 @@
       "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
       "courseNumber": "BC101",
       "durationDays": 1,
+      "keyWords": "solidity, rich, degen, memecoins, trump, lambo",
       "deliveryMethods": {
         "classroom": false,
         "distance": true
@@ -87,6 +91,7 @@
       "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
       "courseNumber": "AIBA101",
       "durationDays": 5,
+      "keyWords": "Chatgpt, database, api, python, backend, typescript, blazeSQL",
       "deliveryMethods": {
         "classroom": false,
         "distance": true
@@ -107,6 +112,7 @@
       "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
       "courseNumber": "BE101",
       "durationDays": 10,
+      "keyWords": "node.js, database, api, Javascript, backend, typescript",
       "deliveryMethods": {
         "classroom": true,
         "distance": false

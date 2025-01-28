@@ -1,18 +1,27 @@
 // src/js/main.js
 import { displayCourses } from './components/courseList.js';
+import { SearchManager } from './utilities/search.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const currentPage = window.location.pathname;
+  const currentPath = window.location.pathname;
+  const isHomePage =
+    currentPath === '/' ||
+    currentPath.endsWith('index.html') ||
+    currentPath.endsWith('/');
 
   try {
-    if (currentPage.includes('index.html') || currentPage === '/') {
-      // Show only 3 featured courses on home page
+    if (isHomePage) {
       await displayCourses('course-list', { limit: 3 });
-    } else if (currentPage.includes('course-view.html')) {
+      new SearchManager(
+        'courseSearch',
+        'courseFilter',
+        'searchButton',
+        'course-list'
+      );
+    } else if (currentPath.includes('course-view.html')) {
       const urlParams = new URLSearchParams(window.location.search);
       const view = urlParams.get('view');
 
-      // Update page title and description based on view
       const pageTitle = document.getElementById('pageTitle');
       const pageDescription = document.getElementById('pageDescription');
 
@@ -25,6 +34,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         pageDescription.textContent = 'Browse our available courses';
         await displayCourses('courseGrid');
       }
+
+      new SearchManager(
+        'searchInput',
+        'deliveryFilter',
+        'searchButton',
+        'courseGrid'
+      );
     }
   } catch (error) {
     console.error('Application initialization failed:', error);
