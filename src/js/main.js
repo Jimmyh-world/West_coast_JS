@@ -1,8 +1,12 @@
 // src/js/main.js
 import { displayCourses } from './components/courseList.js';
 import { SearchManager } from './utilities/search.js';
+import { initNavigation } from './components/navigation.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
+  // Initialize shared navigation
+  initNavigation().init();
+
   const currentPath = window.location.pathname;
   const isHomePage =
     currentPath === '/' ||
