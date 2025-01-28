@@ -1,6 +1,6 @@
-// src/js/utilities/search.js
 import { getCourses } from '../api/courseServices.js';
 import { createCourseCard } from '../components/courseList.js';
+import { eventHandler } from './eventHandler.js';
 
 export class SearchManager {
   constructor(
@@ -9,12 +9,6 @@ export class SearchManager {
     searchButtonId,
     resultsContainerId
   ) {
-    console.log('Initializing SearchManager with:', {
-      searchInputId,
-      filterSelectId,
-      searchButtonId,
-      resultsContainerId,
-    });
     this.searchInput = document.getElementById(searchInputId);
     this.filterSelect = document.getElementById(filterSelectId);
     this.searchButton = document.getElementById(searchButtonId);
@@ -33,11 +27,11 @@ export class SearchManager {
   }
 
   setupEventListeners() {
-    this.searchButton.addEventListener('click', () => this.handleSearch());
-    this.searchInput.addEventListener('keyup', (e) => {
+    eventHandler.on(this.searchButton, 'click', () => this.handleSearch());
+    eventHandler.on(this.searchInput, 'keyup', (e) => {
       if (e.key === 'Enter') this.handleSearch();
     });
-    this.filterSelect.addEventListener('change', () => this.handleSearch());
+    eventHandler.on(this.filterSelect, 'change', () => this.handleSearch());
   }
 
   async handleSearch() {
@@ -54,7 +48,6 @@ export class SearchManager {
 
     let results = this.courses.filter((course) => {
       const matchesSearch =
-        searchTerm === '' ||
         course.title.toLowerCase().includes(searchTerm) ||
         course.keyWords.toLowerCase().includes(searchTerm) ||
         course.discription.toLowerCase().includes(searchTerm);
@@ -84,5 +77,9 @@ export class SearchManager {
     this.resultsContainer.innerHTML = results
       .map((course) => createCourseCard(course))
       .join('');
+  }
+
+  destroy() {
+    eventHandler.removeAll();
   }
 }

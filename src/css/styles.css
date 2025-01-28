@@ -201,7 +201,7 @@ body {
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow: hidden; /* This ensures the image doesn't spill out of rounded corners */
+  overflow: hidden; /* Ensures the image doesn't spill out of rounded corners */
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
@@ -245,11 +245,13 @@ body {
   margin-bottom: 0.5rem;
 }
 
+/* UPDATED: Slightly larger base font, increased spacing for readability */
 .course-description {
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: var(--color-text);
-  margin-bottom: 1rem;
-  line-height: 1.5;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  max-width: 600px; /* optional: helps limit line length on large screens */
 }
 
 .course-details {
@@ -306,18 +308,90 @@ body {
   margin: 1rem 0;
 }
 
-/* Footer */
+/* ====================== FOOTER ====================== */
 footer {
   background-color: white;
-  padding: 4rem 0 2rem;
+  padding: 2rem 0;
   margin-top: 4rem;
   border-top: 1px solid var(--color-text-light);
 }
 
+/* Main footer grid container */
 .footer-content {
   display: grid;
+  /* Single column on mobile */
   grid-template-columns: 1fr;
-  gap: 2rem;
+  /* Remove any grid-auto-flow: column here! */
+  gap: 3rem; /* space between columns/rows */
+  text-align: center; /* center text on small screens */
+  max-width: 1200px; /* or any desired width (px, rem, %…) */
+  margin: 0 auto; /* centers horizontally within its parent */
+}
+
+/* Each column (footer-section) */
+.footer-section {
+  /* optional: padding: 0 1rem; */
+}
+
+.footer-section h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+  text-align: center;
+}
+
+.footer-section p {
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* Quick Links list */
+.footer-section ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  display: flex; /* flex container for horizontal row */
+  flex-direction: row; /* row of links */
+  text-align: center;
+  justify-content: center; /* center them horizontally */
+  gap: 1rem; /* spacing between links */
+}
+
+/* Remove bullets from <li> if needed */
+.footer-section li {
+  list-style: none;
+}
+
+/* Footer link styling */
+.footer-section li a {
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-section li a:hover {
+  color: var(--color-primary-dark);
+}
+
+/* Bottom area (copyright, etc.) */
+.footer-bottom {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.875rem;
+}
+
+/* ================== Responsive Adjustments ================== */
+
+/* At 768px+, switch to three columns */
+@media (min-width: 768px) {
+  .footer-content {
+    grid-template-columns: repeat(3, 1fr);
+    text-align: left; /* Typically left-aligned columns on desktop */
+  }
 }
 
 /* About Page Styles */
@@ -348,6 +422,14 @@ footer {
 
 .contact-details {
   margin-top: 2rem;
+}
+
+/* ADDED: Ensures the main course image is responsive and centered */
+.course-detail-image {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
 }
 
 .contact-item {
@@ -459,6 +541,7 @@ footer {
 
   .footer-content {
     grid-template-columns: repeat(3, 1fr);
+    text-align: left; /* Typically left-aligned columns on desktop */
   }
 
   .hero h1 {
@@ -470,4 +553,34 @@ footer {
   .container {
     padding: 0 2rem;
   }
+}
+
+/* NEW: Course Detail Layout & Typography
+   ---------------------------------------
+   Displays the course image and the text side-by-side on larger screens.
+   Stacks as a single column on smaller devices.
+*/
+.course-detail-container {
+  display: grid;
+  grid-template-columns: 1fr; /* Default: single column for mobile */
+  gap: 2rem;
+  padding: 2rem 0; /* Add vertical spacing around course content */
+}
+
+@media (min-width: 768px) {
+  .course-detail-container {
+    grid-template-columns: 1fr 1fr; /* Two columns on tablets and larger */
+    align-items: start;
+  }
+}
+
+/* Example: Spacing and font sizing for the header content area if you have .course-header-content */
+.course-header-content h1 {
+  font-size: 2rem; /* Slightly smaller than hero but still prominent */
+  margin-bottom: 0.5rem;
+}
+
+.course-header-content .tagline {
+  margin-bottom: 1rem;
+  color: var(--color-text-light);
 }
