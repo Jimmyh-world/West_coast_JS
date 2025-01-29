@@ -2,7 +2,6 @@
 const apiUrl = 'http://localhost:3000';
 
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('Login page loaded');
   const form = document.getElementById('login-form');
 
   if (!form) {
@@ -35,12 +34,14 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       console.log('Login successful, storing user data');
-      // Store user session
       localStorage.setItem('user', JSON.stringify(user));
 
-      console.log('Redirecting to my-page');
-      // Redirect to my-page
-      window.location.href = '/src/pages/my-page.html';
+      // Get the stored return URL or default to my-page
+      const returnUrl =
+        localStorage.getItem('lastPage') || '/src/pages/my-page.html';
+      console.log('Redirecting to:', returnUrl);
+      localStorage.removeItem('lastPage'); // Clear stored URL
+      window.location.href = returnUrl;
     } catch (error) {
       console.error('Login error:', error);
       errorContainer.textContent = error.message;

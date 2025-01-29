@@ -6,42 +6,31 @@ export function createCourseCard(course, isBooked = false) {
   const imagePath = courseUtils.getImagePath(course);
 
   return `
-        <article class="course-card">
-            <div class="course-image">
-                <img src="${imagePath}" 
-                     alt="${course.title}" 
-                     onerror="this.src='/src/images/placeholder.webp'">
-            </div>
-            <div class="course-content">
-                <h3>${course.title}</h3>
-                <p class="tagline">${course.tagLine}</p>
-                <div class="delivery-methods">
-                    ${courseUtils.createDeliveryMethodBadges(
-                      course.deliveryMethods
-                    )}
-                </div>
-                <p class="duration">${course.durationDays} days</p>
-                ${
-                  isBooked
-                    ? `
-                    <div class="booking-info">
-                        <p class="session-date">Session Date: ${courseUtils.formatDate(
-                          course.sessionDate
-                        )}</p>
-                        <a href="/src/pages/course-details.html?id=${
-                          course.id
-                        }" 
-                           class="btn btn-secondary">View Details</a>
-                    </div>
-                `
-                    : `
-                    <a href="/src/pages/course-details.html?id=${course.id}" 
-                       class="btn btn-primary">Learn More</a>
-                `
-                }
-            </div>
-        </article>
-    `;
+    <article class="course-card">
+      <div class="course-image">
+        <img src="${imagePath}" 
+             alt="${course.title}" 
+             onerror="this.src='/src/images/placeholder.webp'">
+      </div>
+      <div class="course-content">
+        <h3>${course.title}</h3>
+        <p class="tagline">${course.tagLine}</p>
+        <div class="delivery-methods">
+          ${courseUtils.createDeliveryMethodBadges(course.deliveryMethods)}
+        </div>
+        <p class="duration">${course.durationDays} days</p>
+        ${
+          isBooked
+            ? `<div class="booking-info">
+              <p class="session-date">Session Date: ${courseUtils.formatDate(
+                course.sessionDate
+              )}</p>
+             </div>`
+            : `<a href="/src/pages/course-details.html?id=${course.id}" class="btn btn-primary">Learn More</a>`
+        }
+      </div>
+    </article>
+  `;
 }
 
 export async function displayCourses(containerId, options = {}) {

@@ -2,6 +2,7 @@
 import { eventHandler } from '../utilities/eventHandler.js';
 import { courseUtils } from '../utilities/courseUtils.js';
 import { createCourseCard } from '../components/courseList.js';
+import { cancelBooking } from '../api/courseServices.js';
 
 class MyPageManager {
   constructor() {
@@ -50,7 +51,6 @@ class MyPageManager {
       if (!response.ok) throw new Error('Failed to load bookings');
       this.bookings = await response.json();
 
-      // Load course details for each booking
       const coursePromises = this.bookings.map((booking) =>
         fetch(`http://localhost:3000/courses/${booking.courseId}`).then((res) =>
           res.json()
@@ -58,7 +58,6 @@ class MyPageManager {
       );
       const courses = await Promise.all(coursePromises);
 
-      // Merge course details with bookings
       this.bookings = this.bookings.map((booking, index) => ({
         ...booking,
         course: courses[index],
@@ -69,10 +68,8 @@ class MyPageManager {
   }
 
   setupEventListeners() {
-    // Logout button
     eventHandler.on(this.logoutBtn, 'click', () => this.handleLogout());
 
-    // Tab switching
     document.querySelectorAll('.tab-btn').forEach((button) => {
       eventHandler.on(button, 'click', (e) => this.handleTabSwitch(e));
     });
@@ -85,15 +82,21 @@ class MyPageManager {
 
   handleTabSwitch(event) {
     const activeTab = event.target.dataset.tab;
-
-    // Update active button state
-    document.querySelectorAll('.tab-btn').forEach((btn) => {
-      btn.classList.remove('active');
-    });
+    document
+      .querySelectorAll('.tab-btn')
+      .forEach((btn) => btn.classList.remove('active'));
     event.target.classList.add('active');
-
-    // Render appropriate course list
     this.renderCourseList(activeTab);
+  }
+
+  async handleCancelBooking(bookingId, courseId) {
+    try {
+      await cancelBooking(bookingId, courseId);
+      await this.loadUserBookings();
+      this.renderCourseList('upcoming');
+    } catch (error) {
+      alert('Failed to cancel booking: ' + error.message);
+    }
   }
 
   render() {
@@ -103,17 +106,16 @@ class MyPageManager {
 
   renderUserDetails() {
     if (!this.userDetails) return;
-
     this.userDetails.innerHTML = `
-            <div class="user-detail-item">
-                <span class="label">Name:</span>
-                <span class="value">${this.user.name}</span>
-            </div>
-            <div class="user-detail-item">
-                <span class="label">Email:</span>
-                <span class="value">${this.user.email}</span>
-            </div>
-        `;
+      <div class="user-detail-item">
+        <span class="label">Name:</span>
+        <span class="value">${this.user.name}</span>
+      </div>
+      <div class="user-detail-item">
+        <span class="label">Email:</span>
+        <span class="value">${this.user.email}</span>
+      </div>
+    `;
   }
 
   renderCourseList(type = 'upcoming') {
@@ -127,23 +129,32 @@ class MyPageManager {
 
     if (filteredBookings.length === 0) {
       this.coursesContainer.innerHTML = `
-                <div class="no-courses-message">
-                    <p>No ${type} courses found.</p>
-                </div>
-            `;
+      <div class="no-courses-message">
+        <p>No ${type} courses found.</p>
+      </div>
+    `;
       return;
     }
 
-    // Add the course-grid class to the container
     this.coursesContainer.className = 'course-grid';
-
-    // Use the same createCourseCard function with additional booking info
     this.coursesContainer.innerHTML = filteredBookings
       .map((booking) => {
         const course = booking.course;
-        // Add session date to the course object for display
-        course.sessionDate = booking.sessionDate;
-        return createCourseCard(course, true); // true indicates this is a booked course
+        const courseCard = createCourseCard(course, true);
+
+        return courseCard.replace(
+          '</article>',
+          `
+      <div class="booking-actions">
+        <a href="/src/pages/course-details.html?id=${course.id}" class="btn btn-primary">View Details</a>
+        <button class="btn btn-secondary" 
+          onclick="if(confirm('Are you sure you want to cancel this booking?')) window.myPageManager.handleCancelBooking('${booking.id}', '${course.id}')">
+          Cancel Booking
+        </button>
+      </div>
+      </article>
+    `
+        );
       })
       .join('');
   }
@@ -153,6 +164,5 @@ class MyPageManager {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  new MyPageManager();
-});
+// Make instance available globally for the cancel button onclick handler
+window.myPageManager = new MyPageManager();
