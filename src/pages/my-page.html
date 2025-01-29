@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Page - WestCoast Education</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <script type="module" src="../js/pages/myPage.js"></script>
+    <script type="module" src="../js/main.js" defer></script>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+        </nav>
+    </header>
+
+    <main>
+        <section class="my-page-section">
+            <div class="container">
+                <div class="profile-container">
+                    <div class="profile-header">
+                        <h1>My Profile</h1>
+                        <button id="logout-btn" class="btn btn-secondary">Logout</button>
+                    </div>
+
+                    <div class="profile-content">
+                        <div class="user-info">
+                            <h2>Personal Information</h2>
+                            <div id="user-details"></div>
+                        </div>
+
+                        <div class="my-courses">
+                            <h2>My Courses</h2>
+                            <div class="tabs">
+                                <button class="tab-btn active" data-tab="upcoming">Upcoming Courses</button>
+                                <button class="tab-btn" data-tab="completed">Completed Courses</button>
+                            </div>
+                            <!-- courses-container will automatically get course-grid class -->
+                            <div id="courses-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+    </footer>
+</body>
+
+</html>

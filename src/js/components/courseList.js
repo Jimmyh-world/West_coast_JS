@@ -1,7 +1,8 @@
+// src/js/components/courseList.js
 import { getCourses } from '../api/courseServices.js';
 import { courseUtils } from '../utilities/courseUtils.js';
 
-function createCourseCard(course) {
+export function createCourseCard(course, isBooked = false) {
   const imagePath = courseUtils.getImagePath(course);
 
   return `
@@ -20,8 +21,24 @@ function createCourseCard(course) {
                     )}
                 </div>
                 <p class="duration">${course.durationDays} days</p>
-                <a href="/src/pages/course-details.html?id=${course.id}" 
-                   class="btn btn-primary">Learn More</a>
+                ${
+                  isBooked
+                    ? `
+                    <div class="booking-info">
+                        <p class="session-date">Session Date: ${courseUtils.formatDate(
+                          course.sessionDate
+                        )}</p>
+                        <a href="/src/pages/course-details.html?id=${
+                          course.id
+                        }" 
+                           class="btn btn-secondary">View Details</a>
+                    </div>
+                `
+                    : `
+                    <a href="/src/pages/course-details.html?id=${course.id}" 
+                       class="btn btn-primary">Learn More</a>
+                `
+                }
             </div>
         </article>
     `;
@@ -54,10 +71,10 @@ export async function displayCourses(containerId, options = {}) {
       filteredCourses = filteredCourses.slice(0, limit);
     }
 
-    container.innerHTML = filteredCourses.map(createCourseCard).join('');
+    container.innerHTML = filteredCourses
+      .map((course) => createCourseCard(course))
+      .join('');
   } catch (error) {
     courseUtils.handleError(error, containerId);
   }
 }
-
-export { createCourseCard };

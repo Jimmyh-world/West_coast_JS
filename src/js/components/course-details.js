@@ -1,5 +1,9 @@
 // src/js/components/course-details.js
-import { getCourseById } from '../api/courseServices.js';
+import {
+  getCourseById,
+  createBooking,
+  updateCourseSeats,
+} from '../api/courseServices.js';
 import { courseUtils } from '../utilities/courseUtils.js';
 import { eventHandler } from '../utilities/eventHandler.js';
 
@@ -35,10 +39,49 @@ class CourseDetailsManager {
     });
   }
 
-  handleBooking(event) {
+  async handleBooking(event) {
+    event.preventDefault();
+
+    // Check if user is logged in
+    const userData = localStorage.getItem('user');
+    if (!userData) {
+      window.location.href = '/src/pages/login.html';
+      return;
+    }
+
+    const user = JSON.parse(userData);
     const sessionDate = event.target.dataset.sessionDate;
-    // Booking logic here - can be expanded later
-    console.log(`Booking requested for session: ${sessionDate}`);
+
+    try {
+      // Create booking
+      const bookingData = {
+        userId: user.id,
+        courseId: this.courseId,
+        sessionDate: sessionDate,
+        bookingDate: new Date().toISOString(),
+        status: 'confirmed',
+      };
+
+      await createBooking(bookingData);
+
+      // Update course seats
+      const course = await getCourseById(this.courseId);
+      const sessionIndex = course.scheduledDates.findIndex(
+        (date) => date.startDate === sessionDate
+      );
+
+      if (sessionIndex !== -1) {
+        course.scheduledDates[sessionIndex].availableSeats--;
+        await updateCourseSeats(this.courseId, course);
+      }
+
+      // Show success message and redirect
+      alert('Course booked successfully!');
+      window.location.href = '/src/pages/my-page.html';
+    } catch (error) {
+      console.error('Booking error:', error);
+      alert('Failed to book the course. Please try again.');
+    }
   }
 
   renderCourse(course) {
@@ -97,15 +140,35 @@ class CourseDetailsManager {
                               date.availableSeats
                             }</span>
                         </div>
-                        <button class="btn btn-primary book-btn" 
-                                data-session-date="${date.startDate}">
-                            Book Now
-                        </button>
+                        ${this.renderBookingButton(date)}
                     </div>
                 `
                   )
                   .join('')}
             </div>
+        `;
+  }
+
+  renderBookingButton(date) {
+    const isLoggedIn = localStorage.getItem('user') !== null;
+
+    if (date.availableSeats <= 0) {
+      return `<button class="btn btn-secondary" disabled>Fully Booked</button>`;
+    }
+
+    if (!isLoggedIn) {
+      return `
+                <a href="/src/pages/login.html" class="btn btn-primary">
+                    Sign in to Book
+                </a>
+            `;
+    }
+
+    return `
+            <button class="btn btn-primary book-btn" 
+                    data-session-date="${date.startDate}">
+                Book Now
+            </button>
         `;
   }
 
