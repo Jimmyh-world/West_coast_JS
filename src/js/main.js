@@ -3,17 +3,19 @@ import { displayCourses } from './components/courseList.js';
 import { SearchManager } from './utilities/search.js';
 import { initNavigation } from './components/navigation.js';
 
+// Ensure navigation is initialized immediately
 document.addEventListener('DOMContentLoaded', async () => {
-  // Initialize shared navigation
-  initNavigation().init();
-
-  const currentPath = window.location.pathname;
-  const isHomePage =
-    currentPath === '/' ||
-    currentPath.endsWith('index.html') ||
-    currentPath.endsWith('/');
-
   try {
+    // Always initialize navigation first
+    const navigation = initNavigation();
+    navigation.init();
+
+    const currentPath = window.location.pathname;
+    const isHomePage =
+      currentPath === '/' ||
+      currentPath.endsWith('index.html') ||
+      currentPath.endsWith('/');
+
     if (isHomePage) {
       await displayCourses('course-list', { limit: 3 });
       new SearchManager(
