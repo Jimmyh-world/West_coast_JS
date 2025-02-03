@@ -133,6 +133,22 @@
       "email": "test@test.com",
       "password": "123456",
       "name": "Test"
+    },
+    {
+      "id": "6cf4",
+      "email": "james@test.com",
+      "password": "123456",
+      "name": "james",
+      "phone": "65464654654",
+      "address": "drgsfdgs"
+    },
+    {
+      "id": "99a3",
+      "name": "bob",
+      "email": "bob@test.com",
+      "password": "123456",
+      "phone": "0000000000",
+      "address": "vbdfgbd"
     }
   ],
   "bookings": [
