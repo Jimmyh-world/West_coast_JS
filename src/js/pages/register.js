@@ -1,51 +1,59 @@
 /**
  * Registration Page Handler
  *
- * Manages new user registration including:
- * - Form validation (email format, password requirements, phone number format)
- * - Duplicate email checking
+ * Manages user registration process:
+ * - Form validation
+ * - Email uniqueness check
  * - User data submission
- * - Error handling and display
- * - Post-registration redirect
+ * - Session management
+ * - Navigation handling
  *
  * Dependencies:
- * - Requires register-form element in HTML
- * - Uses localStorage for user session and return URL
+ * - register-form element in HTML
+ * - localStorage for session
+ * - JSON server API
  *
  * @module register
  */
 
-/**
- * Registration Page Handler
- */
+const API_URL = 'http://localhost:3000';
 
-const apiUrl = 'http://localhost:3000';
+class RegistrationManager {
+  constructor() {
+    this.form = document.getElementById('register-form');
+    if (!this.form) return;
 
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('register-form');
-  if (!form) return;
+    this.setupErrorContainer();
+    this.initializeFormHandler();
+  }
 
-  const emailInput = document.getElementById('email');
-  const errorContainer = document.createElement('div');
-  errorContainer.className = 'error-message';
-  form.insertBefore(errorContainer, form.firstChild);
+  setupErrorContainer() {
+    this.errorContainer = document.createElement('div');
+    this.errorContainer.className = 'error-message';
+    this.form.insertBefore(this.errorContainer, this.form.firstChild);
+  }
 
-  const validateEmail = (email) => {
-    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    return isValid;
-  };
+  initializeFormHandler() {
+    this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+  }
 
-  const validatePassword = (password) => /^\d{6}$/.test(password);
+  validateEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
 
-  const validatePhone = (phone) => {
-    if (!phone) return true; // Optional field
+  validatePassword(password) {
+    return /^\d{6}$/.test(password);
+  }
+
+  validatePhone(phone) {
+    if (!phone) return true;
     return /^\+?\d{10,14}$/.test(phone.replace(/[\s-]/g, ''));
-  };
+  }
 
-  const checkExistingEmail = async (email) => {
+  async checkExistingEmail(email) {
     try {
       const response = await fetch(
-        `${apiUrl}/users?email=${encodeURIComponent(email)}`
+        `${API_URL}/users?email=${encodeURIComponent(email)}`
       );
       if (!response.ok) throw new Error('Network error');
       const users = await response.json();
@@ -54,11 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error checking email:', error);
       throw new Error('Failed to check email availability');
     }
-  };
+  }
 
-  const registerUser = async (userData) => {
+  async registerUser(userData) {
     try {
-      const response = await fetch(`${apiUrl}/users`, {
+      const response = await fetch(`${API_URL}/users`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
@@ -74,46 +82,58 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Registration error:', error);
       throw error;
     }
-  };
+  }
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    errorContainer.textContent = '';
-
-    const formData = {
-      name: form.name.value.trim(),
-      email: form.email.value.trim(),
-      password: form.password.value,
-      phone: form.phone?.value?.trim() || '',
-      address: form.address?.value?.trim() || '',
+  getFormData() {
+    return {
+      name: this.form.name.value.trim(),
+      email: this.form.email.value.trim(),
+      password: this.form.password.value,
+      phone: this.form.phone?.value?.trim() || '',
+      address: this.form.address?.value?.trim() || '',
     };
+  }
+
+  validateFormData(formData) {
+    if (!formData.name) throw new Error('Name is required');
+    if (!this.validateEmail(formData.email))
+      throw new Error('Please enter a valid email address');
+    if (!this.validatePassword(formData.password))
+      throw new Error('Password must be exactly 6 numbers');
+    if (!this.validatePhone(formData.phone))
+      throw new Error('Please enter a valid phone number or leave empty');
+  }
+
+  handleError(error) {
+    this.errorContainer.textContent = error.message;
+    this.errorContainer.style.display = 'block';
+  }
+
+  async handleRegistrationSuccess(user) {
+    localStorage.setItem('user', JSON.stringify(user));
+    const returnUrl =
+      localStorage.getItem('lastPage') || '/src/pages/my-page.html';
+    localStorage.removeItem('lastPage');
+    window.location.href = returnUrl;
+  }
+
+  async handleSubmit(e) {
+    e.preventDefault();
+    this.errorContainer.textContent = '';
 
     try {
-      // Validate required fields
-      if (!formData.name) throw new Error('Name is required');
-      if (!validateEmail(formData.email))
-        throw new Error('Please enter a valid email address');
-      if (!validatePassword(formData.password))
-        throw new Error('Password must be exactly 6 numbers');
-      if (!validatePhone(formData.phone))
-        throw new Error('Please enter a valid phone number or leave empty');
+      const formData = this.getFormData();
+      this.validateFormData(formData);
 
-      // Check if email already exists
-      const emailExists = await checkExistingEmail(formData.email);
+      const emailExists = await this.checkExistingEmail(formData.email);
       if (emailExists) throw new Error('Email already registered');
 
-      // Register user
-      const user = await registerUser(formData);
-
-      // Store user data and redirect
-      localStorage.setItem('user', JSON.stringify(user));
-      const returnUrl =
-        localStorage.getItem('lastPage') || '/src/pages/my-page.html';
-      localStorage.removeItem('lastPage');
-      window.location.href = returnUrl;
+      const user = await this.registerUser(formData);
+      await this.handleRegistrationSuccess(user);
     } catch (error) {
-      errorContainer.textContent = error.message;
-      errorContainer.style.display = 'block';
+      this.handleError(error);
     }
-  });
-});
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => new RegistrationManager());
