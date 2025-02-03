@@ -17,7 +17,7 @@
         {
           "startDate": "2025-02-15",
           "format": "classroom",
-          "availableSeats": 15
+          "availableSeats": 14
         }
       ]
     },
@@ -38,7 +38,7 @@
         {
           "startDate": "2025-03-15",
           "format": "classroom",
-          "availableSeats": 15
+          "availableSeats": 14
         }
       ]
     },
@@ -135,5 +135,22 @@
       "name": "james"
     }
   ],
-  "bookings": []
+  "bookings": [
+    {
+      "id": "ecc7",
+      "userId": "ca3d",
+      "courseId": "2",
+      "sessionDate": "2025-03-15",
+      "bookingDate": "2025-02-01T11:18:09.941Z",
+      "status": "confirmed"
+    },
+    {
+      "id": "246c",
+      "userId": "ca3d",
+      "courseId": "1",
+      "sessionDate": "2025-02-15",
+      "bookingDate": "2025-02-01T11:30:58.879Z",
+      "status": "confirmed"
+    }
+  ]
 }
