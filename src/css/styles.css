@@ -258,6 +258,15 @@ body {
   margin-bottom: 0.5rem;
 }
 
+.card-actions {
+  margin-top: 15px;
+}
+
+.card-actions .btn {
+  width: 100%;
+  text-align: center;
+}
+
 /* UPDATED: Slightly larger base font, increased spacing for readability */
 .course-description {
   font-size: 1rem;
@@ -339,6 +348,42 @@ body {
   box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
 }
 
+.format-selection {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 10px 0;
+}
+
+.format-label {
+  font-weight: 600;
+  color: #333;
+}
+
+.required-asterisk {
+  color: #ff4444;
+  margin-right: 3px;
+}
+
+.format-select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 2px solid #ccc;
+  background-color: white;
+  font-size: 1em;
+  width: 200px;
+}
+
+.format-select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.format {
+  font-weight: 500;
+  color: #666;
+}
 /* My Page Styles */
 .my-page-section {
   padding: 4rem 0;

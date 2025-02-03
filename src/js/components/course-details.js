@@ -55,6 +55,7 @@ class CourseDetailsManager {
       ? await checkExistingBooking(JSON.parse(userData).id, this.courseId)
       : false;
 
+    this.currentCourse = course;
     this.renderCourse(course, hasExistingBooking);
     this.setupBookingButtons();
   }
@@ -82,6 +83,20 @@ class CourseDetailsManager {
     try {
       const user = JSON.parse(userData);
       const sessionDate = event.target.dataset.sessionDate;
+      const formatSelect = event.target
+        .closest('.session-card')
+        .querySelector('.format-select');
+
+      if (formatSelect && !formatSelect.value) {
+        alert('Please select a course format before booking.');
+        return;
+      }
+
+      const selectedFormat = formatSelect
+        ? formatSelect.value
+        : this.currentCourse.scheduledDates.find(
+            (d) => d.startDate === sessionDate
+          ).format;
 
       const bookingData = {
         userId: user.id,
@@ -89,6 +104,7 @@ class CourseDetailsManager {
         sessionDate,
         bookingDate: new Date().toISOString(),
         status: 'confirmed',
+        format: selectedFormat,
       };
 
       await createBooking(bookingData);
@@ -168,18 +184,56 @@ class CourseDetailsManager {
   }
 
   generateSessionCard(date, hasExistingBooking) {
+    const deliveryOptions = this.getDeliveryOptions(date);
+
     return `
       <div class="session-card">
         <div class="session-info">
           <span class="date">Starts: ${courseUtils.formatDate(
             date.startDate
           )}</span>
-          <span class="format">${date.format}</span>
+          ${
+            deliveryOptions.length > 1
+              ? `<div class="format-selection">
+                <label for="format-${date.startDate}" class="format-label">
+                  <span class="required-asterisk">*</span> Select your preferred format:
+                </label>
+                <select 
+                  id="format-${date.startDate}"
+                  class="format-select" 
+                  data-date="${date.startDate}"
+                  required
+                >
+                  <option value="" disabled selected>Choose format...</option>
+                  ${deliveryOptions
+                    .map(
+                      (format) =>
+                        `<option value="${format}">${
+                          format.charAt(0).toUpperCase() + format.slice(1)
+                        }</option>`
+                    )
+                    .join('')}
+                </select>
+              </div>`
+              : `<span class="format">Format: ${
+                  date.format.charAt(0).toUpperCase() + date.format.slice(1)
+                }</span>`
+          }
           <span class="seats">Available seats: ${date.availableSeats}</span>
         </div>
         ${this.renderBookingButton(date, hasExistingBooking)}
       </div>
     `;
+  }
+
+  getDeliveryOptions(date) {
+    const course = this.currentCourse;
+    const options = [];
+
+    if (course.deliveryMethods.classroom) options.push('classroom');
+    if (course.deliveryMethods.distance) options.push('distance');
+
+    return options;
   }
 
   renderBookingButton(date, hasExistingBooking) {
