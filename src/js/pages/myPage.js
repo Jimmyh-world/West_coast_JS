@@ -1,8 +1,25 @@
-// src/js/pages/myPage.js
+/**
+ * My Page Manager
+ *
+ * Handles user's personal dashboard including:
+ * - User profile display
+ * - Course booking management
+ * - Booking cancellation
+ * - Tab navigation between upcoming and past courses
+ *
+ * Dependencies:
+ * - eventHandler for DOM event management
+ * - courseList for course card creation
+ * - courseServices for booking operations
+ *
+ * @module myPage
+ */
+
 import { eventHandler } from '../utilities/eventHandler.js';
-import { courseUtils } from '../utilities/courseUtils.js';
 import { createCourseCard } from '../components/courseList.js';
 import { cancelBooking } from '../api/courseServices.js';
+
+const API_URL = 'http://localhost:3000';
 
 class MyPageManager {
   constructor() {
@@ -16,26 +33,20 @@ class MyPageManager {
 
   async init() {
     this.checkAuthentication();
-    await this.loadUserData();
-    await this.loadUserBookings();
+    await Promise.all([this.loadUserData(), this.loadUserBookings()]);
     this.setupEventListeners();
     this.render();
   }
 
   checkAuthentication() {
     const userData = localStorage.getItem('user');
-    if (!userData) {
-      window.location.href = '/src/pages/login.html';
-      return;
-    }
+    if (!userData) return (window.location.href = '/src/pages/login.html');
     this.user = JSON.parse(userData);
   }
 
   async loadUserData() {
     try {
-      const response = await fetch(
-        `http://localhost:3000/users/${this.user.id}`
-      );
+      const response = await fetch(`${API_URL}/users/${this.user.id}`);
       if (!response.ok) throw new Error('Failed to load user data');
       this.user = await response.json();
     } catch (error) {
@@ -46,17 +57,18 @@ class MyPageManager {
   async loadUserBookings() {
     try {
       const response = await fetch(
-        `http://localhost:3000/bookings?userId=${this.user.id}`
+        `${API_URL}/bookings?userId=${this.user.id}`
       );
       if (!response.ok) throw new Error('Failed to load bookings');
-      this.bookings = await response.json();
 
-      const coursePromises = this.bookings.map((booking) =>
-        fetch(`http://localhost:3000/courses/${booking.courseId}`).then((res) =>
-          res.json()
+      this.bookings = await response.json();
+      const courses = await Promise.all(
+        this.bookings.map((booking) =>
+          fetch(`${API_URL}/courses/${booking.courseId}`).then((res) =>
+            res.json()
+          )
         )
       );
-      const courses = await Promise.all(coursePromises);
 
       this.bookings = this.bookings.map((booking, index) => ({
         ...booking,
@@ -69,10 +81,11 @@ class MyPageManager {
 
   setupEventListeners() {
     eventHandler.on(this.logoutBtn, 'click', () => this.handleLogout());
-
-    document.querySelectorAll('.tab-btn').forEach((button) => {
-      eventHandler.on(button, 'click', (e) => this.handleTabSwitch(e));
-    });
+    document
+      .querySelectorAll('.tab-btn')
+      .forEach((button) =>
+        eventHandler.on(button, 'click', (e) => this.handleTabSwitch(e))
+      );
   }
 
   handleLogout() {
@@ -122,41 +135,44 @@ class MyPageManager {
     if (!this.coursesContainer) return;
 
     const now = new Date();
-    const filteredBookings = this.bookings.filter((booking) => {
-      const courseDate = new Date(booking.sessionDate);
-      return type === 'upcoming' ? courseDate >= now : courseDate < now;
-    });
+    const filteredBookings = this.bookings.filter((booking) =>
+      type === 'upcoming'
+        ? new Date(booking.sessionDate) >= now
+        : new Date(booking.sessionDate) < now
+    );
 
-    if (filteredBookings.length === 0) {
+    if (!filteredBookings.length) {
       this.coursesContainer.innerHTML = `
-      <div class="no-courses-message">
-        <p>No ${type} courses found.</p>
-      </div>
-    `;
+        <div class="no-courses-message">
+          <p>No ${type} courses found.</p>
+        </div>
+      `;
       return;
     }
 
     this.coursesContainer.className = 'course-grid';
     this.coursesContainer.innerHTML = filteredBookings
-      .map((booking) => {
-        const course = booking.course;
-        const courseCard = createCourseCard(course, true);
+      .map((booking) => this.createBookingCard(booking))
+      .join('');
+  }
 
-        return courseCard.replace(
-          '</article>',
-          `
+  createBookingCard(booking) {
+    const courseCard = createCourseCard(booking.course, true);
+    return courseCard.replace(
+      '</article>',
+      `
       <div class="booking-actions">
-        <a href="/src/pages/course-details.html?id=${course.id}" class="btn btn-primary">View Details</a>
+        <a href="/src/pages/course-details.html?id=${booking.course.id}" 
+           class="btn btn-primary">View Details</a>
         <button class="btn btn-secondary" 
-          onclick="if(confirm('Are you sure you want to cancel this booking?')) window.myPageManager.handleCancelBooking('${booking.id}', '${course.id}')">
+                onclick="if(confirm('Are you sure you want to cancel this booking?')) 
+                        window.myPageManager.handleCancelBooking('${booking.id}', '${booking.course.id}')">
           Cancel Booking
         </button>
       </div>
       </article>
     `
-        );
-      })
-      .join('');
+    );
   }
 
   destroy() {
@@ -164,5 +180,4 @@ class MyPageManager {
   }
 }
 
-// Make instance available globally for the cancel button onclick handler
 window.myPageManager = new MyPageManager();

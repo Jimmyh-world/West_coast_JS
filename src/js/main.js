@@ -1,4 +1,20 @@
-// src/js/main.js
+/**
+ * Application Entry Point
+ *
+ * Manages the initialization and routing of the application:
+ * - Navigation setup
+ * - Page-specific content loading
+ * - Search functionality initialization
+ * - Course display management
+ *
+ * Dependencies:
+ * - courseList for course display
+ * - search for course filtering
+ * - navigation for site structure
+ *
+ * @module main
+ */
+
 import { displayCourses } from './components/courseList.js';
 import { SearchManager } from './utilities/search.js';
 import { initNavigation } from './components/navigation.js';
@@ -25,8 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         'course-list'
       );
     } else if (currentPath.includes('course-view.html')) {
-      const urlParams = new URLSearchParams(window.location.search);
-      const view = urlParams.get('view');
+      const view = new URLSearchParams(window.location.search).get('view');
 
       const pageTitle = document.getElementById('pageTitle');
       const pageDescription = document.getElementById('pageDescription');

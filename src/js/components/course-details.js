@@ -1,4 +1,21 @@
-// src/js/components/course-details.js
+/**
+ * Course Details Component
+ *
+ * Manages individual course display and interaction:
+ * - Course information rendering
+ * - Booking management
+ * - Session availability
+ * - User authentication checks
+ *
+ * Dependencies:
+ * - courseServices for data operations
+ * - courseUtils for formatting
+ * - eventHandler for DOM events
+ * - Requires user session in localStorage
+ *
+ * @module courseDetails
+ */
+
 import {
   getCourseById,
   createBooking,
@@ -34,12 +51,9 @@ class CourseDetailsManager {
 
   async renderCourseWithBookingStatus(course) {
     const userData = localStorage.getItem('user');
-    let hasExistingBooking = false;
-
-    if (userData) {
-      const user = JSON.parse(userData);
-      hasExistingBooking = await checkExistingBooking(user.id, this.courseId);
-    }
+    const hasExistingBooking = userData
+      ? await checkExistingBooking(JSON.parse(userData).id, this.courseId)
+      : false;
 
     this.renderCourse(course, hasExistingBooking);
     this.setupBookingButtons();
@@ -47,16 +61,15 @@ class CourseDetailsManager {
 
   setupBookingButtons() {
     const bookButtons = this.container.querySelectorAll('.book-btn');
-    bookButtons.forEach((button) => {
-      eventHandler.on(button, 'click', async (e) => {
-        e.preventDefault();
-        await this.handleBooking(e);
-      });
-    });
+    bookButtons.forEach((button) =>
+      eventHandler.on(button, 'click', (e) => this.handleBooking(e))
+    );
   }
 
   async handleBooking(event) {
+    event.preventDefault();
     const userData = localStorage.getItem('user');
+
     if (!userData) {
       localStorage.setItem(
         'lastPage',
@@ -66,14 +79,14 @@ class CourseDetailsManager {
       return;
     }
 
-    const user = JSON.parse(userData);
-    const sessionDate = event.target.dataset.sessionDate;
-
     try {
+      const user = JSON.parse(userData);
+      const sessionDate = event.target.dataset.sessionDate;
+
       const bookingData = {
         userId: user.id,
         courseId: this.courseId,
-        sessionDate: sessionDate,
+        sessionDate,
         bookingDate: new Date().toISOString(),
         status: 'confirmed',
       };
@@ -99,31 +112,44 @@ class CourseDetailsManager {
 
   renderCourse(course, hasExistingBooking) {
     const imagePath = courseUtils.getImagePath(course);
+    this.container.innerHTML = this.generateCourseHTML(
+      course,
+      imagePath,
+      hasExistingBooking
+    );
+  }
 
-    this.container.innerHTML = `
+  generateCourseHTML(course, imagePath, hasExistingBooking) {
+    return `
       <div class="course-detail-container">
-        <div class="course-header">
-          <img src="${imagePath}" 
-               alt="${course.title}" 
-               class="course-detail-image"
-               onerror="this.src='/src/images/placeholder.webp'">
-          <div class="course-header-content">
-            <h1>${course.title}</h1>
-            <p class="tagline">${course.tagLine}</p>
-            <div class="course-meta">
-              <span class="course-number">Course: ${course.courseNumber}</span>
-              <span class="duration">${course.durationDays} days</span>
-            </div>
-            <div class="delivery-methods">
-              ${courseUtils.createDeliveryMethodBadges(course.deliveryMethods)}
-            </div>
-          </div>
-        </div>
+        ${this.generateCourseHeader(course, imagePath)}
         <div class="course-description">
           <h2>About this course</h2>
           <p>${course.discription}</p>
         </div>
         ${this.renderScheduledDates(course.scheduledDates, hasExistingBooking)}
+      </div>
+    `;
+  }
+
+  generateCourseHeader(course, imagePath) {
+    return `
+      <div class="course-header">
+        <img src="${imagePath}" 
+             alt="${course.title}" 
+             class="course-detail-image"
+             onerror="this.src='/src/images/placeholder.webp'">
+        <div class="course-header-content">
+          <h1>${course.title}</h1>
+          <p class="tagline">${course.tagLine}</p>
+          <div class="course-meta">
+            <span class="course-number">Course: ${course.courseNumber}</span>
+            <span class="duration">${course.durationDays} days</span>
+          </div>
+          <div class="delivery-methods">
+            ${courseUtils.createDeliveryMethodBadges(course.deliveryMethods)}
+          </div>
+        </div>
       </div>
     `;
   }
@@ -135,21 +161,23 @@ class CourseDetailsManager {
       <div class="course-dates">
         <h2>Upcoming Sessions</h2>
         ${dates
-          .map(
-            (date) => `
-          <div class="session-card">
-            <div class="session-info">
-              <span class="date">Starts: ${courseUtils.formatDate(
-                date.startDate
-              )}</span>
-              <span class="format">${date.format}</span>
-              <span class="seats">Available seats: ${date.availableSeats}</span>
-            </div>
-            ${this.renderBookingButton(date, hasExistingBooking)}
-          </div>
-        `
-          )
+          .map((date) => this.generateSessionCard(date, hasExistingBooking))
           .join('')}
+      </div>
+    `;
+  }
+
+  generateSessionCard(date, hasExistingBooking) {
+    return `
+      <div class="session-card">
+        <div class="session-info">
+          <span class="date">Starts: ${courseUtils.formatDate(
+            date.startDate
+          )}</span>
+          <span class="format">${date.format}</span>
+          <span class="seats">Available seats: ${date.availableSeats}</span>
+        </div>
+        ${this.renderBookingButton(date, hasExistingBooking)}
       </div>
     `;
   }
@@ -157,17 +185,12 @@ class CourseDetailsManager {
   renderBookingButton(date, hasExistingBooking) {
     const isLoggedIn = localStorage.getItem('user') !== null;
 
-    if (hasExistingBooking) {
+    if (hasExistingBooking)
       return `<button class="btn btn-secondary" disabled>Already Booked</button>`;
-    }
-
-    if (date.availableSeats <= 0) {
+    if (date.availableSeats <= 0)
       return `<button class="btn btn-secondary" disabled>Fully Booked</button>`;
-    }
-
-    if (!isLoggedIn) {
+    if (!isLoggedIn)
       return `<button class="btn btn-primary book-btn">Sign in to Book</button>`;
-    }
 
     return `
       <button class="btn btn-primary book-btn" data-session-date="${date.startDate}">

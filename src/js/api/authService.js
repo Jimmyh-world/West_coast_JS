@@ -1,4 +1,19 @@
-// src/js/api/authService.js
+/**
+ * Authentication Service
+ *
+ * Manages user authentication and session handling:
+ * - User login and registration
+ * - Session management
+ * - Token generation and storage
+ * - User data persistence
+ *
+ * Dependencies:
+ * - Requires JSON server running on localhost:3000
+ * - Uses localStorage for session persistence
+ * - Expects users endpoint with email/password auth
+ *
+ * @module authService
+ */
 
 const BASE_URL = 'http://localhost:3000';
 
@@ -10,20 +25,13 @@ class AuthService {
 
   async login(email, password) {
     try {
-      const response = await fetch(`${BASE_URL}/users?email=${email}`);
-      const users = await response.json();
-
-      if (users.length === 0) {
-        throw new Error('User not found');
-      }
+      const users = await this._fetchUserByEmail(email);
+      if (!users.length) throw new Error('User not found');
 
       const user = users[0];
-      if (user.password !== password) {
-        throw new Error('Invalid password');
-      }
+      if (user.password !== password) throw new Error('Invalid password');
 
-      const token = this._generateToken();
-      this._setSession(token, user);
+      this._setSession(this._generateToken(), user);
       return user;
     } catch (error) {
       console.error('Login failed:', error);
@@ -33,28 +41,11 @@ class AuthService {
 
   async register(userData) {
     try {
-      // Check if user already exists
-      const existingUsers = await fetch(
-        `${BASE_URL}/users?email=${userData.email}`
-      );
-      const users = await existingUsers.json();
+      const existingUsers = await this._fetchUserByEmail(userData.email);
+      if (existingUsers.length) throw new Error('Email already registered');
 
-      if (users.length > 0) {
-        throw new Error('Email already registered');
-      }
-
-      const response = await fetch(`${BASE_URL}/users`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...userData,
-          registeredDate: new Date().toISOString(),
-        }),
-      });
-
-      const newUser = await response.json();
-      const token = this._generateToken();
-      this._setSession(token, newUser);
+      const newUser = await this._createUser(userData);
+      this._setSession(this._generateToken(), newUser);
       return newUser;
     } catch (error) {
       console.error('Registration failed:', error);
@@ -69,7 +60,7 @@ class AuthService {
   }
 
   isAuthenticated() {
-    return !!this.getToken();
+    return Boolean(this.getToken());
   }
 
   getToken() {
@@ -79,6 +70,24 @@ class AuthService {
   getCurrentUser() {
     const userData = localStorage.getItem(this.userKey);
     return userData ? JSON.parse(userData) : null;
+  }
+
+  // Private methods
+  async _fetchUserByEmail(email) {
+    const response = await fetch(`${BASE_URL}/users?email=${email}`);
+    return response.json();
+  }
+
+  async _createUser(userData) {
+    const response = await fetch(`${BASE_URL}/users`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...userData,
+        registeredDate: new Date().toISOString(),
+      }),
+    });
+    return response.json();
   }
 
   _setSession(token, user) {

@@ -1,3 +1,20 @@
+/**
+ * Event Handler Utility
+ *
+ * Provides centralized event management with automatic cleanup:
+ * - Event listener registration with unique keys
+ * - Individual event removal
+ * - Bulk event cleanup
+ * - Memory leak prevention
+ *
+ * Used by:
+ * - Navigation component
+ * - Course list component
+ * - My page component
+ *
+ * @module eventHandler
+ */
+
 export const eventHandler = {
   listeners: new Map(),
 
@@ -15,11 +32,11 @@ export const eventHandler = {
 
   off(key) {
     const listener = this.listeners.get(key);
-    if (listener) {
-      const { element, eventType, handler } = listener;
-      element.removeEventListener(eventType, handler);
-      this.listeners.delete(key);
-    }
+    if (!listener) return;
+
+    const { element, eventType, handler } = listener;
+    element.removeEventListener(eventType, handler);
+    this.listeners.delete(key);
   },
 
   removeAll() {

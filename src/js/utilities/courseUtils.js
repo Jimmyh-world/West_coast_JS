@@ -1,3 +1,19 @@
+/**
+ * Course Utilities
+ *
+ * Provides shared functionality for course-related operations:
+ * - Image path resolution with fallback
+ * - Date formatting
+ * - Delivery method badge generation
+ * - Error handling
+ *
+ * Used by:
+ * - Course list component
+ * - Course details component
+ *
+ * @module courseUtils
+ */
+
 export const courseUtils = {
   getImagePath(course) {
     return course.image?.trim()
@@ -10,31 +26,30 @@ export const courseUtils = {
   },
 
   createDeliveryMethodBadges(deliveryMethods) {
-    return `
-            ${
-              deliveryMethods.classroom
-                ? '<span class="badge badge-classroom">Classroom</span>'
-                : ''
-            }
-            ${
-              deliveryMethods.distance
-                ? '<span class="badge badge-distance">Distance</span>'
-                : ''
-            }
-        `;
+    const badges = [];
+
+    if (deliveryMethods.classroom) {
+      badges.push('<span class="badge badge-classroom">Classroom</span>');
+    }
+
+    if (deliveryMethods.distance) {
+      badges.push('<span class="badge badge-distance">Distance</span>');
+    }
+
+    return badges.join('');
   },
 
   handleError(error, containerId) {
     const container = document.getElementById(containerId);
+    if (!container) return;
+
     console.error('Course operation failed:', error);
-    if (container) {
-      container.innerHTML = `
-                <div class="error-message">
-                    <p>${
-                      error.message ||
-                      'An error occurred while loading the content.'
-                    }</p>
-                </div>`;
-    }
+    container.innerHTML = `
+      <div class="error-message">
+        <p>${
+          error.message || 'An error occurred while loading the content.'
+        }</p>
+      </div>
+    `;
   },
 };

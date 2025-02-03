@@ -1,27 +1,58 @@
-// src/js/pages/register.js
+/**
+ * Registration Page Handler
+ *
+ * Manages new user registration including:
+ * - Form validation (email format, password requirements)
+ * - Duplicate email checking
+ * - User data submission
+ * - Error handling and display
+ * - Post-registration redirect
+ *
+ * Dependencies:
+ * - Requires register-form element in HTML
+ * - Uses localStorage for user session and return URL
+ *
+ * @module register
+ */
+
 const apiUrl = 'http://localhost:3000';
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('register-form');
+  if (!form) return;
+
   const emailInput = document.getElementById('email');
   const errorContainer = document.createElement('div');
   errorContainer.className = 'error-message';
   form.insertBefore(errorContainer, form.firstChild);
 
+  const validateEmail = () => {
+    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value);
+    emailInput.setCustomValidity(
+      isValid ? '' : 'Please enter a valid email address'
+    );
+    emailInput.classList.toggle('invalid', !isValid);
+  };
+
+  const validatePassword = (password) => /^\d{6}$/.test(password);
+
+  const registerUser = async (userData) => {
+    const checkUser = await fetch(`${apiUrl}/users?email=${userData.email}`);
+    const existingUsers = await checkUser.json();
+
+    if (existingUsers.length > 0) throw new Error('Email already registered');
+
+    const response = await fetch(`${apiUrl}/users`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) throw new Error('Registration failed');
+    return response.json();
+  };
+
   emailInput.addEventListener('input', validateEmail);
-
-  function validateEmail() {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const isValid = emailPattern.test(emailInput.value);
-
-    if (!isValid) {
-      emailInput.setCustomValidity('Please enter a valid email address');
-      emailInput.classList.add('invalid');
-    } else {
-      emailInput.setCustomValidity('');
-      emailInput.classList.remove('invalid');
-    }
-  }
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -32,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    if (!/^\d{6}$/.test(form.password.value)) {
+    if (!validatePassword(form.password.value)) {
       errorContainer.textContent = 'Password must be exactly 6 numbers';
       return;
     }
@@ -44,22 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     try {
-      const checkUser = await fetch(`${apiUrl}/users?email=${userData.email}`);
-      const existingUsers = await checkUser.json();
-
-      if (existingUsers.length > 0) {
-        throw new Error('Email already registered');
-      }
-
-      const response = await fetch(`${apiUrl}/users`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
-      });
-
-      if (!response.ok) throw new Error('Registration failed');
-
-      const user = await response.json();
+      const user = await registerUser(userData);
       localStorage.setItem('user', JSON.stringify(user));
 
       const returnUrl =

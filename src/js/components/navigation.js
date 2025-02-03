@@ -1,16 +1,31 @@
-// src/js/components/navigation.js
+/**
+ * Navigation Component
+ *
+ * Manages site-wide navigation elements:
+ * - Header navigation
+ * - Footer content
+ * - Mobile menu behavior
+ * - Authentication state
+ * - Active link tracking
+ *
+ * Dependencies:
+ * - eventHandler for DOM events
+ * - Requires nav.navbar and footer elements
+ * - Uses localStorage for auth state
+ *
+ * @module navigation
+ */
+
 import { eventHandler } from '../utilities/eventHandler.js';
 
 export function initNavigation() {
-  function isAuthenticated() {
-    return localStorage.getItem('user') !== null;
-  }
+  const isAuthenticated = () => localStorage.getItem('user') !== null;
 
-  function handleLogout(e) {
+  const handleLogout = (e) => {
     e.preventDefault();
     localStorage.removeItem('user');
     window.location.href = '/index.html';
-  }
+  };
 
   const navTemplate = `
     <div class="container">
@@ -36,19 +51,19 @@ export function initNavigation() {
         ${
           isAuthenticated()
             ? `
-              <li><a href="/src/pages/my-page.html">My Page</a></li>
-              <li><a href="#" id="nav-logout" class="btn-login">Logout</a></li>
-            `
+            <li><a href="/src/pages/my-page.html">My Page</a></li>
+            <li><a href="#" id="nav-logout" class="btn-login">Logout</a></li>
+          `
             : `
-              <li><a href="/src/pages/login.html" class="btn-login" 
-                  onclick="localStorage.setItem('lastPage', window.location.pathname + window.location.search)">
-                  Sign In
-              </a></li>
-              <li><a href="/src/pages/register.html" class="btn-register"
-                  onclick="localStorage.setItem('lastPage', window.location.pathname + window.location.search)">
-                  Register
-              </a></li>
-            `
+            <li><a href="/src/pages/login.html" class="btn-login" 
+                onclick="localStorage.setItem('lastPage', window.location.pathname + window.location.search)">
+                Sign In
+            </a></li>
+            <li><a href="/src/pages/register.html" class="btn-register"
+                onclick="localStorage.setItem('lastPage', window.location.pathname + window.location.search)">
+                Register
+            </a></li>
+          `
         }
       </ul>
     </div>`;
@@ -79,7 +94,7 @@ export function initNavigation() {
       </div>
     </div>`;
 
-  function initMobileMenu() {
+  const initMobileMenu = () => {
     const mobileBtn = document.querySelector('.mobile-menu-btn');
     const navMenu = document.querySelector('.nav-menu');
 
@@ -89,9 +104,9 @@ export function initNavigation() {
         mobileBtn.classList.toggle('active');
       });
     }
-  }
+  };
 
-  function setActiveNavLink() {
+  const setActiveNavLink = () => {
     const currentPath = window.location.pathname;
     document.querySelectorAll('.nav-menu a').forEach((link) => {
       const href = link.getAttribute('href');
@@ -99,9 +114,9 @@ export function initNavigation() {
         link.classList.add('active');
       }
     });
-  }
+  };
 
-  function init() {
+  const init = () => {
     const nav = document.querySelector('nav.navbar');
     if (nav) {
       nav.innerHTML = navTemplate;
@@ -120,7 +135,7 @@ export function initNavigation() {
     if (footer) {
       footer.innerHTML = footerTemplate;
     }
-  }
+  };
 
   return { init };
 }
