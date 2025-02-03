@@ -17,7 +17,7 @@
         {
           "startDate": "2025-02-15",
           "format": "classroom",
-          "availableSeats": 14
+          "availableSeats": 15
         }
       ]
     },
@@ -59,7 +59,7 @@
         {
           "startDate": "2025-04-05",
           "format": "classroom",
-          "availableSeats": 20
+          "availableSeats": 19
         }
       ]
     },
@@ -80,7 +80,7 @@
         {
           "startDate": "2025-02-15",
           "format": "classroom",
-          "availableSeats": 15
+          "availableSeats": 13
         }
       ]
     },
@@ -129,27 +129,19 @@
   ],
   "users": [
     {
-      "id": "ca3d",
-      "email": "bob@test.com",
+      "id": "9ecf",
+      "email": "test@test.com",
       "password": "123456",
-      "name": "james"
+      "name": "Test"
     }
   ],
   "bookings": [
     {
-      "id": "ecc7",
-      "userId": "ca3d",
+      "id": "a872",
+      "userId": "9ecf",
       "courseId": "2",
       "sessionDate": "2025-03-15",
-      "bookingDate": "2025-02-01T11:18:09.941Z",
-      "status": "confirmed"
-    },
-    {
-      "id": "246c",
-      "userId": "ca3d",
-      "courseId": "1",
-      "sessionDate": "2025-02-15",
-      "bookingDate": "2025-02-01T11:30:58.879Z",
+      "bookingDate": "2025-02-03T14:01:17.581Z",
       "status": "confirmed"
     }
   ]

@@ -1,4 +1,20 @@
-// src/js/components/courseList.js
+/**
+ * Course List Component
+ *
+ * Manages course listing display and filtering:
+ * - Course card generation
+ * - Delivery method filtering
+ * - List pagination
+ * - Error handling
+ *
+ * Dependencies:
+ * - courseServices for data fetching
+ * - courseUtils for formatting
+ * - Requires container element in DOM
+ *
+ * @module courseList
+ */
+
 import { getCourses } from '../api/courseServices.js';
 import { courseUtils } from '../utilities/courseUtils.js';
 
@@ -22,9 +38,9 @@ export function createCourseCard(course, isBooked = false) {
         ${
           isBooked
             ? `<div class="booking-info">
-              <p class="session-date">Session Date: ${courseUtils.formatDate(
-                course.sessionDate
-              )}</p>
+               <p class="session-date">Session Date: ${courseUtils.formatDate(
+                 course.sessionDate
+               )}</p>
              </div>`
             : `<a href="/src/pages/course-details.html?id=${course.id}" class="btn btn-primary">Learn More</a>`
         }
@@ -34,30 +50,16 @@ export function createCourseCard(course, isBooked = false) {
 }
 
 export async function displayCourses(containerId, options = {}) {
-  const { limit, filter } = options;
   const container = document.getElementById(containerId);
-
-  if (!container) {
-    throw new Error(`Container ${containerId} not found`);
-  }
+  if (!container) throw new Error(`Container ${containerId} not found`);
 
   try {
     container.innerHTML = '<p>Loading courses...</p>';
     const courses = await getCourses();
-    let filteredCourses = courses;
 
-    if (filter === 'classroom') {
-      filteredCourses = courses.filter(
-        (course) => course.deliveryMethods.classroom
-      );
-    } else if (filter === 'distance') {
-      filteredCourses = courses.filter(
-        (course) => course.deliveryMethods.distance
-      );
-    }
-
-    if (limit) {
-      filteredCourses = filteredCourses.slice(0, limit);
+    let filteredCourses = filterCourses(courses, options.filter);
+    if (options.limit) {
+      filteredCourses = filteredCourses.slice(0, options.limit);
     }
 
     container.innerHTML = filteredCourses
@@ -66,4 +68,19 @@ export async function displayCourses(containerId, options = {}) {
   } catch (error) {
     courseUtils.handleError(error, containerId);
   }
+}
+
+function filterCourses(courses, filter) {
+  if (!filter) return courses;
+
+  return courses.filter((course) => {
+    switch (filter) {
+      case 'classroom':
+        return course.deliveryMethods.classroom;
+      case 'distance':
+        return course.deliveryMethods.distance;
+      default:
+        return true;
+    }
+  });
 }

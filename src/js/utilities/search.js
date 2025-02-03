@@ -1,3 +1,20 @@
+/**
+ * Search Manager
+ *
+ * Handles course search functionality including:
+ * - Real-time search filtering
+ * - Delivery method filtering
+ * - Results display
+ * - Event management
+ *
+ * Dependencies:
+ * - courseServices for course data
+ * - courseList for result display
+ * - eventHandler for DOM events
+ *
+ * @module SearchManager
+ */
+
 import { getCourses } from '../api/courseServices.js';
 import { createCourseCard } from '../components/courseList.js';
 import { eventHandler } from './eventHandler.js';

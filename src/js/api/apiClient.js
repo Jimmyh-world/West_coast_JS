@@ -1,21 +1,33 @@
-// src/js/api/apiClient.js
+/**
+ * API Client Service
+ *
+ * Provides centralized HTTP request handling for the application:
+ * - JSON request formatting
+ * - Error handling
+ * - Course CRUD operations
+ * - Response parsing
+ *
+ * Dependencies:
+ * - Requires JSON server running on localhost:3000
+ * - Expects standard REST endpoints for courses
+ *
+ * @module apiClient
+ */
 
 const BASE_URL = 'http://localhost:3000';
 
 class ApiClient {
   async fetchJson(endpoint, options = {}) {
+    const defaultHeaders = { 'Content-Type': 'application/json' };
+    const requestOptions = {
+      headers: defaultHeaders,
+      ...options,
+    };
+
     try {
-      const response = await fetch(`${BASE_URL}${endpoint}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        ...options,
-      });
-
-      if (!response.ok) {
+      const response = await fetch(`${BASE_URL}${endpoint}`, requestOptions);
+      if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
       return await response.json();
     } catch (error) {
       console.error(`API call failed: ${endpoint}`, error);
@@ -23,29 +35,30 @@ class ApiClient {
     }
   }
 
-  async getCourses() {
+  // Course Management Methods
+  getCourses() {
     return this.fetchJson('/courses');
   }
 
-  async getCourseById(id) {
+  getCourseById(id) {
     return this.fetchJson(`/courses/${id}`);
   }
 
-  async createCourse(courseData) {
+  createCourse(courseData) {
     return this.fetchJson('/courses', {
       method: 'POST',
       body: JSON.stringify(courseData),
     });
   }
 
-  async updateCourse(id, courseData) {
+  updateCourse(id, courseData) {
     return this.fetchJson(`/courses/${id}`, {
       method: 'PUT',
       body: JSON.stringify(courseData),
     });
   }
 
-  async deleteCourse(id) {
+  deleteCourse(id) {
     return this.fetchJson(`/courses/${id}`, {
       method: 'DELETE',
     });
