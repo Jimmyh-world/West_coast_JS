@@ -43,17 +43,29 @@ class CourseDetailsManager {
 
     try {
       const course = await getCourseById(this.courseId);
-      await this.renderCourseWithBookingStatus(course);
+      // Check if the course is in userBookedCourses
+      const isBooked = window.userBookedCourses?.includes(
+        this.courseId.toString()
+      );
+      await this.renderCourseWithBookingStatus(course, isBooked);
     } catch (error) {
       courseUtils.handleError(error, this.container.id);
     }
   }
 
-  async renderCourseWithBookingStatus(course) {
+  async renderCourseWithBookingStatus(course, isBooked) {
     const userData = localStorage.getItem('user');
-    const hasExistingBooking = userData
-      ? await checkExistingBooking(JSON.parse(userData).id, this.courseId)
+    const userId = userData ? JSON.parse(userData).id : null;
+
+    console.log('User ID:', userId);
+    console.log('Course ID:', this.courseId);
+    console.log('User Booked Courses:', window.userBookedCourses);
+
+    const hasExistingBooking = userId
+      ? await checkExistingBooking(userId, this.courseId)
       : false;
+
+    console.log('Has Existing Booking:', hasExistingBooking);
 
     this.currentCourse = course;
     this.renderCourse(course, hasExistingBooking);
@@ -255,5 +267,7 @@ class CourseDetailsManager {
 }
 
 export function initCourseDetails(containerId) {
+  // Remove the separate updateBookingButton call since it's now handled
+  // within the CourseDetailsManager
   return new CourseDetailsManager(containerId);
 }

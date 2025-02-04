@@ -64,33 +64,65 @@ class MyPageManager {
 
   async loadUserBookings() {
     try {
+      console.log('Fetching bookings for user:', this.user.id);
       const bookingsResponse = await fetch(
         `${API_URL}/bookings?userId=${this.user.id}`
       );
-      if (!bookingsResponse.ok) throw new Error('Failed to load bookings');
+
+      if (!bookingsResponse.ok) {
+        throw new Error(`Server returned ${bookingsResponse.status}`);
+      }
 
       const bookings = await bookingsResponse.json();
+
+      // Store the user's booked course IDs globally
+      window.userBookedCourses = bookings
+        .filter(
+          (booking) =>
+            booking.courseId !== null && booking.status === 'confirmed'
+        )
+        .map((booking) => booking.courseId);
+
+      console.log('User booked courses:', window.userBookedCourses);
+
       const courses = await this.fetchBookingCourses(bookings);
       this.bookings = this.mergeBookingsWithCourses(bookings, courses);
     } catch (error) {
-      console.error('Error loading bookings:', error);
+      console.error('Detailed error info:', {
+        message: error.message,
+        stack: error.stack,
+        userId: this.user?.id,
+      });
+      this.bookings = [];
+      window.userBookedCourses = [];
     }
   }
 
   async fetchBookingCourses(bookings) {
-    return Promise.all(
-      bookings.map((booking) =>
-        fetch(`${API_URL}/courses/${booking.courseId}`).then((res) =>
-          res.json()
-        )
-      )
+    // Filter out bookings with null courseIds and fetch course details for valid ones
+    const validBookings = bookings.filter(
+      (booking) => booking.courseId !== null
     );
+
+    try {
+      return await Promise.all(
+        validBookings.map((booking) =>
+          fetch(`${API_URL}/courses/${booking.courseId}`).then((res) =>
+            res.json()
+          )
+        )
+      );
+    } catch (error) {
+      console.error('Error fetching course details:', error);
+      return [];
+    }
   }
 
   mergeBookingsWithCourses(bookings, courses) {
-    return bookings.map((booking, index) => ({
+    let courseIndex = 0;
+    return bookings.map((booking) => ({
       ...booking,
-      course: courses[index],
+      course: booking.courseId === null ? null : courses[courseIndex++],
     }));
   }
 
@@ -302,11 +334,36 @@ class MyPageManager {
   }
 
   createBookingCard(booking) {
+    if (!booking.course) {
+      // Handle case where course is null
+      return `
+            <article class="course-card cancelled-booking">
+                <div class="course-info">
+                    <h3>Cancelled/Removed Course</h3>
+                    <div class="session-info">
+                        <span class="session-date">Session Date: ${this.formatBookingDate(
+                          booking.sessionDate
+                        )}</span>
+                        <span class="format-badge ${booking.format.toLowerCase()}">${
+        booking.format
+      }</span>
+                    </div>
+                    <div class="booking-status">
+                        <span class="status-badge">Booking ID: ${
+                          booking.id
+                        }</span>
+                    </div>
+                </div>
+            </article>
+        `;
+    }
+
     const courseCard = this.createBaseCourseCard(booking);
     return this.appendBookingInfo(courseCard, booking);
   }
 
   createBaseCourseCard(booking) {
+    if (!booking.course) return '';
     return createCourseCard(booking.course, true).replace(
       /<span class="session-date">Session Date: [^<]+<\/span>/,
       ''

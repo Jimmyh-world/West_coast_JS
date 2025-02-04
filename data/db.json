@@ -46,18 +46,21 @@
       "title": "AI and Busniess analytics",
       "tagLine": "Make next generation business decisions",
       "courseNumber": "AIBA101",
-      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
-      "durationDays": "5",
+      "discription": "agtewaew",
+      "durationDays": 5,
       "keyWords": "Chatgpt, database, api, python, backend, typescript, blazeSQL",
-      "deliveryMethods.distance": "on",
       "image": "business-ai.webp",
-      "startDate_0": "2025-04-15",
-      "format_0": "classroom",
-      "availableSeats_0": "20",
       "deliveryMethods": {
         "classroom": false,
         "distance": true
       },
+      "scheduledDates": [
+        {
+          "startDate": "2025-02-20",
+          "format": "classroom",
+          "availableSeats": 4
+        }
+      ],
       "id": "5"
     },
     {
@@ -125,15 +128,6 @@
       "format": "classroom"
     },
     {
-      "id": "02c1",
-      "userId": "6cf4",
-      "courseId": null,
-      "sessionDate": "2025-02-15",
-      "bookingDate": "2025-02-03T20:38:35.812Z",
-      "status": "confirmed",
-      "format": "distance"
-    },
-    {
       "id": "a57e",
       "userId": "dbc1",
       "courseId": "2",
@@ -150,6 +144,15 @@
       "bookingDate": "2025-02-03T20:45:39.293Z",
       "status": "confirmed",
       "format": "distance"
+    },
+    {
+      "id": "6fce",
+      "userId": "6cf4",
+      "courseId": "5",
+      "sessionDate": "2025-02-20",
+      "bookingDate": "2025-02-04T15:16:32.356Z",
+      "status": "confirmed",
+      "format": "classroom"
     }
   ]
 }
