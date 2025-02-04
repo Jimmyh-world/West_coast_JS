@@ -25,14 +25,21 @@
       "title": "Blockchain Development",
       "tagLine": "Become a shitcoin millionair",
       "courseNumber": "BC101",
-      "description": "fagasgaege",
-      "durationDays": "1",
+      "discription": "dgvzSVaz",
+      "durationDays": 1,
       "keyWords": "solidity, rich, degen, memecoins, trump, lambo",
       "image": "blockchain.webp",
       "deliveryMethods": {
         "classroom": false,
         "distance": false
       },
+      "scheduledDates": [
+        {
+          "startDate": "2025-02-18",
+          "format": "classroom",
+          "availableSeats": 15
+        }
+      ],
       "id": "4"
     },
     {
@@ -52,6 +59,27 @@
         "distance": true
       },
       "id": "5"
+    },
+    {
+      "id": "dfe6",
+      "title": "wsfga",
+      "tagLine": "sagsaG",
+      "courseNumber": "sGs",
+      "discription": "SGs",
+      "durationDays": 1,
+      "keyWords": "",
+      "image": "",
+      "deliveryMethods": {
+        "classroom": false,
+        "distance": true
+      },
+      "scheduledDates": [
+        {
+          "startDate": "2025-02-27",
+          "format": "classroom",
+          "availableSeats": 12
+        }
+      ]
     }
   ],
   "users": [

@@ -8,13 +8,17 @@ module.exports = {
   mount: [['/node_modules', './node_modules']],
   middleware: [
     function (req, res, next) {
-      // Handle JavaScript files and modules
+      // Handle JavaScript modules
       if (req.url.endsWith('.js') || req.url.endsWith('.mjs')) {
         res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
       }
       // Handle TypeScript files
-      if (req.url.endsWith('.ts')) {
+      else if (req.url.endsWith('.ts')) {
         res.setHeader('Content-Type', 'application/typescript; charset=UTF-8');
+      }
+      // Handle JavaScript modules specifically
+      else if (req.url.includes('/services/') || req.url.includes('/utils/')) {
+        res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
       }
       // Handle JSON files
       if (req.url.endsWith('.json')) {
@@ -28,7 +32,7 @@ module.exports = {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader(
         'Access-Control-Allow-Methods',
-        'GET, POST, PUT, DELETE, OPTIONS, PATCH'
+        'GET, POST, PUT, DELETE, OPTIONS'
       );
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
       next();

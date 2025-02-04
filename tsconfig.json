@@ -7,9 +7,9 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "./src/js",
-    "rootDir": "./src/js",
+    "rootDir": "./src",
     "sourceMap": true
   },
-  "include": ["src/js/**/*.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
 }
