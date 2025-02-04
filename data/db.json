@@ -1,130 +1,57 @@
 {
   "courses": [
     {
-      "id": "1",
-      "title": "Modern Web Development",
-      "tagLine": "Kick start your carrer",
-      "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
-      "courseNumber": "WD101",
-      "durationDays": 20,
-      "keyWords": "HTML, CSS, Javascript, frontend, backend, react",
+      "title": "React Bootcamp test",
+      "tagLine": "A deep dive into react bb",
+      "courseNumber": "R10122",
+      "discription": "dsgdg",
+      "durationDays": "5",
+      "keyWords": "HTML, CSS, Javascript, frontend, react, typescript",
+      "image": "reactBootcamp.webp",
       "deliveryMethods": {
         "classroom": true,
         "distance": true
       },
-      "image": "modernweb.webp",
       "scheduledDates": [
         {
-          "startDate": "2025-02-15",
-          "format": "classroom",
-          "availableSeats": 13
+          "startDate": "2025-02-12",
+          "format": "distance",
+          "availableSeats": 15
         }
-      ]
+      ],
+      "id": "2"
     },
     {
-      "id": "2",
-      "title": "React Bootcamp",
-      "tagLine": "A deep dive into react",
-      "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
-      "courseNumber": "R102",
-      "durationDays": 5,
-      "keyWords": "HTML, CSS, Javascript, frontend, react, typescript",
-      "deliveryMethods": {
-        "classroom": true,
-        "distance": false
-      },
-      "image": "reactBootcamp.webp",
-      "scheduledDates": [
-        {
-          "startDate": "2025-03-15",
-          "format": "classroom",
-          "availableSeats": 13
-        }
-      ]
-    },
-    {
-      "id": "3",
-      "title": "Backend for begginers",
-      "tagLine": "How does it all work?",
-      "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
-      "courseNumber": "BE101",
-      "durationDays": 10,
-      "keyWords": "node.js, database, api, Javascript, backend, typescript",
-      "deliveryMethods": {
-        "classroom": true,
-        "distance": false
-      },
-      "image": "backend.webp",
-      "scheduledDates": [
-        {
-          "startDate": "2025-04-05",
-          "format": "classroom",
-          "availableSeats": 19
-        }
-      ]
-    },
-    {
-      "id": "4",
       "title": "Blockchain Development",
       "tagLine": "Become a shitcoin millionair",
-      "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
       "courseNumber": "BC101",
-      "durationDays": 1,
+      "description": "fagasgaege",
+      "durationDays": "1",
       "keyWords": "solidity, rich, degen, memecoins, trump, lambo",
-      "deliveryMethods": {
-        "classroom": true,
-        "distance": true
-      },
       "image": "blockchain.webp",
-      "scheduledDates": [
-        {
-          "startDate": "2025-02-15",
-          "format": "classroom",
-          "availableSeats": 13
-        }
-      ]
+      "deliveryMethods": {
+        "classroom": false,
+        "distance": false
+      },
+      "id": "4"
     },
     {
-      "id": "5",
       "title": "AI and Busniess analytics",
       "tagLine": "Make next generation business decisions",
-      "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
       "courseNumber": "AIBA101",
-      "durationDays": 5,
+      "description": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
+      "durationDays": "5",
       "keyWords": "Chatgpt, database, api, python, backend, typescript, blazeSQL",
+      "deliveryMethods.distance": "on",
+      "image": "business-ai.webp",
+      "startDate_0": "2025-04-15",
+      "format_0": "classroom",
+      "availableSeats_0": "20",
       "deliveryMethods": {
         "classroom": false,
         "distance": true
       },
-      "image": "business-ai.webp",
-      "scheduledDates": [
-        {
-          "startDate": "2025-04-05",
-          "format": "classroom",
-          "availableSeats": 20
-        }
-      ]
-    },
-    {
-      "id": "6",
-      "title": "Backend for begginers",
-      "tagLine": "How does it all work?",
-      "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
-      "courseNumber": "BE101",
-      "durationDays": 10,
-      "keyWords": "node.js, database, api, Javascript, backend, typescript",
-      "deliveryMethods": {
-        "classroom": true,
-        "distance": false
-      },
-      "image": " ",
-      "scheduledDates": [
-        {
-          "startDate": "2025-04-05",
-          "format": "classroom",
-          "availableSeats": 20
-        }
-      ]
+      "id": "5"
     }
   ],
   "users": [
@@ -172,7 +99,7 @@
     {
       "id": "02c1",
       "userId": "6cf4",
-      "courseId": "1",
+      "courseId": null,
       "sessionDate": "2025-02-15",
       "bookingDate": "2025-02-03T20:38:35.812Z",
       "status": "confirmed",
@@ -190,7 +117,7 @@
     {
       "id": "1fff",
       "userId": "dbc1",
-      "courseId": "1",
+      "courseId": null,
       "sessionDate": "2025-02-15",
       "bookingDate": "2025-02-03T20:45:39.293Z",
       "status": "confirmed",

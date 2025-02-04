@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Administration - WestCoast Education</title>
+    <!-- <link rel="stylesheet" href="../css/styles.css"> -->
+    <link rel="stylesheet" href="../css/admin.css">
+    <script type="module" src="../js/pages/admin.js" defer></script>
+</head>
+
+<body>
+    <header class="main-header">
+        <div class="container">
+            <div class="header-content">
+                <h1>WestCoast Education</h1>
+                <span class="admin-badge">Admin Panel</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h2>Course Management</h2>
+                <div class="page-actions">
+                    <button id="createCourseBtn" class="btn btn-success">
+                        <span class="icon">+</span> Create New Course
+                    </button>
+                    <button id="refreshButton" class="btn btn-primary">
+                        <span class="icon">↻</span> Refresh
+                    </button>
+                </div>
+            </div>
+
+            <div id="courseList" class="course-grid">
+                <!-- Courses will be loaded here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Course Form Modal -->
+    <div id="courseFormModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Create New Course</h2>
+                <button class="close-button">&times;</button>
+            </div>
+            <form id="courseForm">
+                <div class="form-group">
+                    <label for="title">Course Title<span class="required">*</span></label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="tagLine">Tagline<span class="required">*</span></label>
+                    <input type="text" id="tagLine" name="tagLine" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="courseNumber">Course Number<span class="required">*</span></label>
+                    <input type="text" id="courseNumber" name="courseNumber" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description<span class="required">*</span></label>
+                    <textarea id="description" name="description" rows="4" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="durationDays">Duration (Days)<span class="required">*</span></label>
+                    <input type="number" id="durationDays" name="durationDays" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="keyWords">Keywords (comma separated)</label>
+                    <input type="text" id="keyWords" name="keyWords">
+                </div>
+
+                <div class="form-group">
+                    <label>Delivery Methods</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="deliveryMethods.classroom" id="classroom">
+                            Classroom
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="deliveryMethods.distance" id="distance">
+                            Distance
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Image Filename</label>
+                    <input type="text" id="image" name="image">
+                </div>
+
+                <div class="form-group scheduled-dates">
+                    <label>Scheduled Dates</label>
+                    <div id="scheduledDatesContainer">
+                        <!-- Dates will be added here dynamically -->
+                    </div>
+                    <button type="button" class="btn btn-secondary" id="addDateBtn">Add Date</button>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelButton">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveButton">Save Course</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+    </footer>
+</body>
+
+</html>
