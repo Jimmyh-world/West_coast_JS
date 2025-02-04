@@ -10,9 +10,13 @@ export class AdminPage {
   private uiManager: UIManager;
   private courseService: CourseService;
   private notificationManager: NotificationManager;
+  private modal: HTMLElement;
+  private form: HTMLFormElement;
 
   constructor() {
     const elements = this.initializeElements();
+    this.modal = elements.modal;
+    this.form = elements.form;
     this.formManager = new FormManager(elements.form);
     this.uiManager = new UIManager(elements.modal, elements.courseList);
     this.courseService = new CourseService();
@@ -49,7 +53,30 @@ export class AdminPage {
     this.setupRefreshButton();
   }
 
-  private async handleFormSubmit(e: Event): Promise<void> {
+  private setupModalControls(): void {
+    const createButton = document.getElementById('createCourseBtn');
+    const closeButton = this.modal.querySelector('.close-button');
+    const cancelButton = document.getElementById('cancelButton');
+
+    createButton?.addEventListener('click', () =>
+      this.uiManager.showModal(false)
+    );
+    closeButton?.addEventListener('click', () => this.uiManager.hideModal());
+    cancelButton?.addEventListener('click', () => this.uiManager.hideModal());
+  }
+
+  private setupFormSubmission(): void {
+    this.form.addEventListener('submit', (e: SubmitEvent) =>
+      this.handleFormSubmit(e)
+    );
+  }
+
+  private setupRefreshButton(): void {
+    const refreshButton = document.getElementById('refreshButton');
+    refreshButton?.addEventListener('click', () => this.loadCourses());
+  }
+
+  private async handleFormSubmit(e: SubmitEvent): Promise<void> {
     e.preventDefault();
     try {
       const courseData = this.formManager.getFormData();
@@ -80,6 +107,35 @@ export class AdminPage {
     } catch (error) {
       console.error('Error loading courses:', error);
       this.notificationManager.show('error', 'Failed to load courses');
+    }
+  }
+
+  private async handleEdit(courseId: string): Promise<void> {
+    this.currentCourseId = courseId;
+    this.uiManager.showModal(true);
+    await this.loadCourseData(courseId);
+  }
+
+  private async handleDelete(courseId: string): Promise<void> {
+    if (confirm('Are you sure you want to delete this course?')) {
+      try {
+        await this.courseService.deleteCourse(courseId);
+        await this.loadCourses();
+        this.notificationManager.show('success', 'Course deleted successfully');
+      } catch (error) {
+        console.error('Error deleting course:', error);
+        this.notificationManager.show('error', 'Failed to delete course');
+      }
+    }
+  }
+
+  private async loadCourseData(courseId: string): Promise<void> {
+    try {
+      const course = await this.courseService.fetchCourse(courseId);
+      this.formManager.populateForm(course);
+    } catch (error) {
+      console.error('Error loading course data:', error);
+      this.notificationManager.show('error', 'Failed to load course data');
     }
   }
 }

@@ -6,6 +6,8 @@ export class AdminPage {
     constructor() {
         this.currentCourseId = null;
         const elements = this.initializeElements();
+        this.modal = elements.modal;
+        this.form = elements.form;
         this.formManager = new FormManager(elements.form);
         this.uiManager = new UIManager(elements.modal, elements.courseList);
         this.courseService = new CourseService();
@@ -35,6 +37,21 @@ export class AdminPage {
         this.setupModalControls();
         this.setupFormSubmission();
         this.setupRefreshButton();
+    }
+    setupModalControls() {
+        const createButton = document.getElementById('createCourseBtn');
+        const closeButton = this.modal.querySelector('.close-button');
+        const cancelButton = document.getElementById('cancelButton');
+        createButton?.addEventListener('click', () => this.uiManager.showModal(false));
+        closeButton?.addEventListener('click', () => this.uiManager.hideModal());
+        cancelButton?.addEventListener('click', () => this.uiManager.hideModal());
+    }
+    setupFormSubmission() {
+        this.form.addEventListener('submit', (e) => this.handleFormSubmit(e));
+    }
+    setupRefreshButton() {
+        const refreshButton = document.getElementById('refreshButton');
+        refreshButton?.addEventListener('click', () => this.loadCourses());
     }
     async handleFormSubmit(e) {
         e.preventDefault();
@@ -67,6 +84,34 @@ export class AdminPage {
         catch (error) {
             console.error('Error loading courses:', error);
             this.notificationManager.show('error', 'Failed to load courses');
+        }
+    }
+    async handleEdit(courseId) {
+        this.currentCourseId = courseId;
+        this.uiManager.showModal(true);
+        await this.loadCourseData(courseId);
+    }
+    async handleDelete(courseId) {
+        if (confirm('Are you sure you want to delete this course?')) {
+            try {
+                await this.courseService.deleteCourse(courseId);
+                await this.loadCourses();
+                this.notificationManager.show('success', 'Course deleted successfully');
+            }
+            catch (error) {
+                console.error('Error deleting course:', error);
+                this.notificationManager.show('error', 'Failed to delete course');
+            }
+        }
+    }
+    async loadCourseData(courseId) {
+        try {
+            const course = await this.courseService.fetchCourse(courseId);
+            this.formManager.populateForm(course);
+        }
+        catch (error) {
+            console.error('Error loading course data:', error);
+            this.notificationManager.show('error', 'Failed to load course data');
         }
     }
 }
