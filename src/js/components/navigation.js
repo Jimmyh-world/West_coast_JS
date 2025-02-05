@@ -16,7 +16,7 @@
  * @module navigation
  */
 
-import { eventHandler } from '../utilities/eventHandler.js';
+import { eventHandler } from '../utils/eventHandler.js';
 
 export function initNavigation() {
   const isAuthenticated = () => localStorage.getItem('user') !== null;

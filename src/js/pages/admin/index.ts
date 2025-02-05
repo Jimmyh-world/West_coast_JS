@@ -1,8 +1,8 @@
-import { CourseService } from '../services/courseService.js';
-import { NotificationManager } from '../utils/notificationManager.js';
-import { FormManager } from '../managers/formManager.js';
-import { UIManager } from '../managers/uiManager.js';
-import type { Course } from '../types/course';
+import { CourseService } from './courseService.js';
+import { NotificationManager } from './notificationManager.js';
+import { FormManager } from './formManager.js';
+import { UIManager } from './uiManager.js';
+import type { Course } from './types.js';
 
 export class AdminPage {
   private currentCourseId: string | null = null;
@@ -42,15 +42,20 @@ export class AdminPage {
       await this.loadCourses();
       this.setupEventListeners();
     } catch (error) {
-      console.error('Initialization failed:', error);
+      console.error('Error initializing admin page:', error);
       this.notificationManager.show('error', 'Failed to initialize admin page');
     }
   }
 
   private setupEventListeners(): void {
     this.setupModalControls();
-    this.setupFormSubmission();
-    this.setupRefreshButton();
+    this.form.addEventListener('submit', (e) => this.handleFormSubmit(e));
+
+    // Add refresh button handler
+    const refreshButton = document.getElementById('refreshButton');
+    if (refreshButton) {
+      refreshButton.addEventListener('click', () => this.loadCourses());
+    }
   }
 
   private setupModalControls(): void {
@@ -58,43 +63,18 @@ export class AdminPage {
     const closeButton = this.modal.querySelector('.close-button');
     const cancelButton = document.getElementById('cancelButton');
 
-    createButton?.addEventListener('click', () =>
-      this.uiManager.showModal(false)
-    );
+    createButton?.addEventListener('click', () => {
+      this.currentCourseId = null;
+      this.form.reset();
+      const dateContainer = this.form.querySelector('#scheduledDatesContainer');
+      if (dateContainer) dateContainer.innerHTML = '';
+      const modalTitle = this.modal.querySelector('#modalTitle');
+      if (modalTitle) modalTitle.textContent = 'Create New Course';
+      this.uiManager.showModal(false);
+    });
+
     closeButton?.addEventListener('click', () => this.uiManager.hideModal());
     cancelButton?.addEventListener('click', () => this.uiManager.hideModal());
-  }
-
-  private setupFormSubmission(): void {
-    this.form.addEventListener('submit', (e: SubmitEvent) =>
-      this.handleFormSubmit(e)
-    );
-  }
-
-  private setupRefreshButton(): void {
-    const refreshButton = document.getElementById('refreshButton');
-    refreshButton?.addEventListener('click', () => this.loadCourses());
-  }
-
-  private async handleFormSubmit(e: SubmitEvent): Promise<void> {
-    e.preventDefault();
-    try {
-      const courseData = this.formManager.getFormData();
-
-      if (this.currentCourseId) {
-        await this.courseService.updateCourse(this.currentCourseId, courseData);
-        this.notificationManager.show('success', 'Course updated successfully');
-      } else {
-        await this.courseService.createCourse(courseData);
-        this.notificationManager.show('success', 'Course created successfully');
-      }
-
-      this.uiManager.hideModal();
-      await this.loadCourses();
-    } catch (error) {
-      console.error('Error saving course:', error);
-      this.notificationManager.show('error', 'Failed to save course');
-    }
   }
 
   private async loadCourses(): Promise<void> {
@@ -103,10 +83,21 @@ export class AdminPage {
       this.uiManager.renderCourses(courses, {
         onEdit: (id) => this.handleEdit(id),
         onDelete: (id) => this.handleDelete(id),
+        onViewDetails: (id) => this.handleViewDetails(id),
       });
     } catch (error) {
       console.error('Error loading courses:', error);
       this.notificationManager.show('error', 'Failed to load courses');
+    }
+  }
+
+  private async handleViewDetails(courseId: string): Promise<void> {
+    try {
+      const course = await this.courseService.fetchCourse(courseId);
+      this.uiManager.renderCourseDetails(course);
+    } catch (error) {
+      console.error('Error loading course details:', error);
+      this.notificationManager.show('error', 'Failed to load course details');
     }
   }
 
@@ -138,12 +129,34 @@ export class AdminPage {
       this.notificationManager.show('error', 'Failed to load course data');
     }
   }
+
+  private async handleFormSubmit(e: SubmitEvent): Promise<void> {
+    e.preventDefault();
+    try {
+      const courseData: Course = this.formManager.getFormData();
+
+      if (this.currentCourseId) {
+        await this.courseService.updateCourse(this.currentCourseId, courseData);
+        this.notificationManager.show('success', 'Course updated successfully');
+      } else {
+        await this.courseService.createCourse(courseData);
+        this.notificationManager.show('success', 'Course created successfully');
+      }
+
+      this.uiManager.hideModal();
+      await this.loadCourses();
+    } catch (error) {
+      console.error('Error saving course:', error);
+      this.notificationManager.show('error', 'Failed to save course');
+    }
+  }
 }
 
 // Initialize only in browser environment
 if (typeof window !== 'undefined') {
   try {
-    new AdminPage();
+    const adminPage = new AdminPage();
+    Object.assign(window, { adminPage });
   } catch (error) {
     console.error('Failed to initialize AdminPage:', error);
   }

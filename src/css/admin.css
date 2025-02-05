@@ -45,7 +45,8 @@ body {
   border-radius: var(--border-radius);
   box-shadow: var(--shadow-md);
   overflow: hidden;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
   display: flex;
   flex-direction: column;
 }
@@ -53,6 +54,11 @@ body {
 .course-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.course-card.selected {
+  border-color: #0d6efd;
+  background-color: #f8f9fa;
 }
 
 /* Course Image */
@@ -244,142 +250,44 @@ body {
   border-top: 1px solid #dee2e6;
 }
 
-/* Scheduled dates section */
-.scheduled-dates {
-  background: #f8f9fa;
-  padding: 15px;
-  border-radius: 6px;
-  margin-top: 1.5rem;
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 1.5rem;
-}
-
-.scheduled-dates label {
-  font-weight: 600;
+/* Scheduled Dates Styling */
+.scheduled-date-field {
   margin-bottom: 1rem;
-  display: block;
-}
-
-.scheduled-date-group {
-  display: grid;
-  grid-template-columns: 1fr 1fr 80px auto;
-  gap: 10px;
-  align-items: center;
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px;
-}
-
-/* Date input specific width */
-input[type='date'] {
-  width: 100%;
-  min-width: 120px;
-}
-
-/* Available seats input width */
-input[type='number'] {
-  width: 100%;
-  min-width: 60px;
-}
-
-/* Format select width */
-select {
-  width: 100%;
-  min-width: 100px;
-}
-
-/* Checkbox styling */
-.checkbox-group {
-  display: flex;
-  gap: 2rem;
-  margin-top: 0.5rem;
-}
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.checkbox-label input[type='checkbox'] {
-  margin-right: 0.5rem;
-  width: 18px;
-  height: 18px;
-}
-
-/* Button improvements */
-.btn {
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 500;
+  padding: 1rem;
+  background: #f8f9fa;
   border-radius: 4px;
-  transition: all 0.2s ease-in-out;
-  border: none;
-  cursor: pointer;
 }
 
-.btn-primary {
-  background-color: #007bff;
-  color: white;
+.date-inputs {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 1rem;
+  align-items: center;
 }
 
-.btn-secondary {
-  background-color: #6c757d;
-  color: white;
+.date-inputs input,
+.date-inputs select {
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  width: 100%;
 }
 
-.btn-danger {
+.remove-date {
+  padding: 0.5rem 1rem;
   background-color: #dc3545;
   color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
-.btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.remove-date:hover {
+  background-color: #c82333;
 }
 
-/* Add Date button specific styling */
 #addDateBtn {
   margin-top: 1rem;
-  background-color: #28a745;
-  color: white;
-}
-
-/* Required field indicator */
-.required {
-  color: #dc3545;
-  margin-left: 4px;
-}
-
-/* Remove button in scheduled dates */
-.remove-date {
-  padding: 6px 12px;
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-/* Responsive improvements */
-@media (max-width: 576px) {
-  .modal-content {
-    margin: 10px auto;
-    padding: 15px;
-  }
-
-  .scheduled-date-group {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-
-  input[type='date'],
-  select,
-  input[type='number'] {
-    width: 100%;
-  }
 }
 
 .notification {
@@ -425,4 +333,135 @@ select {
     transform: translateX(100%);
     opacity: 0;
   }
+}
+
+/* Form Instructions */
+.form-instructions {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-left: 4px solid #0d6efd;
+  border-radius: 4px;
+}
+
+.form-instructions h4 {
+  color: #0d6efd;
+  margin-bottom: 1rem;
+}
+
+.form-instructions ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.form-instructions li {
+  margin-bottom: 0.5rem;
+}
+
+.form-instructions strong {
+  color: #495057;
+}
+
+/* Input Help Text */
+.input-help {
+  position: relative;
+}
+
+.help-text {
+  display: block;
+  margin-top: 0.25rem;
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.form-control:focus + .help-text {
+  color: #0d6efd;
+}
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.course-details-panel {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+  position: sticky;
+  top: 2rem;
+}
+
+.overview-details p {
+  margin-bottom: 0.5rem;
+}
+
+.session-detail {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.details-placeholder {
+  color: #6c757d;
+  text-align: center;
+  padding: 3rem;
+  font-style: italic;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.enrollments-list {
+  list-style: none;
+  padding: 0;
+}
+
+.enrollment-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.enrolled-students {
+  margin-top: 2rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.students-list {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.student-card {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  border-left: 4px solid #0d6efd;
+  transition: transform 0.2s ease;
+}
+
+.student-card:hover {
+  transform: translateX(4px);
+}
+
+.student-info p {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.student-info p:last-child {
+  margin-bottom: 0;
+}
+
+.student-info strong {
+  color: #495057;
+  min-width: 80px;
+  display: inline-block;
 }

@@ -1,86 +1,128 @@
 {
   "courses": [
     {
-      "title": "React Bootcamp test",
-      "tagLine": "A deep dive into react bb",
-      "courseNumber": "R10122",
-      "discription": "dsgdg",
-      "durationDays": "5",
-      "keyWords": "HTML, CSS, Javascript, frontend, react, typescript",
-      "image": "reactBootcamp.webp",
+      "id": "1",
+      "title": "Modern Web Development",
+      "tagLine": "Kick start your carrer",
+      "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
+      "courseNumber": "WD101",
+      "durationDays": 20,
+      "keyWords": "HTML, CSS, Javascript, frontend, backend, react",
       "deliveryMethods": {
         "classroom": true,
         "distance": true
       },
+      "image": "modernweb.webp",
       "scheduledDates": [
         {
-          "startDate": "2025-02-12",
-          "format": "distance",
-          "availableSeats": 15
+          "startDate": "2025-02-15",
+          "format": "classroom",
+          "availableSeats": 13
         }
-      ],
-      "id": "2"
+      ]
     },
     {
-      "title": "Blockchain Development",
-      "tagLine": "Become a shitcoin millionair",
-      "courseNumber": "BC101",
-      "discription": "dgvzSVaz",
-      "durationDays": 1,
-      "keyWords": "solidity, rich, degen, memecoins, trump, lambo",
-      "image": "blockchain.webp",
+      "id": "2",
+      "title": "React Bootcamp",
+      "tagLine": "A deep dive into react",
+      "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
+      "courseNumber": "R102",
+      "durationDays": 5,
+      "keyWords": "HTML, CSS, Javascript, frontend, react, typescript",
       "deliveryMethods": {
-        "classroom": false,
+        "classroom": true,
         "distance": false
       },
+      "image": "reactBootcamp.webp",
       "scheduledDates": [
         {
-          "startDate": "2025-02-18",
+          "startDate": "2025-03-15",
           "format": "classroom",
-          "availableSeats": 15
+          "availableSeats": 13
         }
-      ],
-      "id": "4"
+      ]
     },
     {
-      "title": "AI and Busniess analytics",
-      "tagLine": "Make next generation business decisions",
-      "courseNumber": "AIBA101",
-      "discription": "agtewaew",
-      "durationDays": 5,
-      "keyWords": "Chatgpt, database, api, python, backend, typescript, blazeSQL",
-      "image": "business-ai.webp",
+      "id": "3",
+      "title": "Backend for begginers",
+      "tagLine": "How does it all work?",
+      "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
+      "courseNumber": "BE101",
+      "durationDays": 10,
+      "keyWords": "node.js, database, api, Javascript, backend, typescript",
       "deliveryMethods": {
-        "classroom": false,
-        "distance": true
+        "classroom": true,
+        "distance": false
       },
+      "image": "backend.webp",
       "scheduledDates": [
         {
-          "startDate": "2025-02-20",
+          "startDate": "2025-04-05",
           "format": "classroom",
-          "availableSeats": 4
+          "availableSeats": 19
         }
-      ],
-      "id": "5"
+      ]
     },
     {
-      "id": "dfe6",
-      "title": "wsfga",
-      "tagLine": "sagsaG",
-      "courseNumber": "sGs",
-      "discription": "SGs",
+      "id": "4",
+      "title": "Blockchain Development",
+      "tagLine": "Become a shitcoin millionair",
+      "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
+      "courseNumber": "BC101",
       "durationDays": 1,
-      "keyWords": "",
-      "image": "",
+      "keyWords": "solidity, rich, degen, memecoins, trump, lambo",
       "deliveryMethods": {
-        "classroom": false,
+        "classroom": true,
         "distance": true
       },
+      "image": "blockchain.webp",
       "scheduledDates": [
         {
-          "startDate": "2025-02-27",
+          "startDate": "2025-02-15",
           "format": "classroom",
           "availableSeats": 12
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "title": "AI and Busniess analytics",
+      "tagLine": "Make next generation business decisions",
+      "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
+      "courseNumber": "AIBA101",
+      "durationDays": 5,
+      "keyWords": "Chatgpt, database, api, python, backend, typescript, blazeSQL",
+      "deliveryMethods": {
+        "classroom": false,
+        "distance": true
+      },
+      "image": "business-ai.webp",
+      "scheduledDates": [
+        {
+          "startDate": "2025-04-05",
+          "format": "classroom",
+          "availableSeats": 20
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "title": "Backend for begginers",
+      "tagLine": "How does it all work?",
+      "discription": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia, tenetur. Sapiente distinctio repudiandae officiis omnis officia consectetur aut nisi nam laboriosam, dolore, accusantium suscipit, quo in quia quasi facere corrupti?",
+      "courseNumber": "BE101",
+      "durationDays": 10,
+      "keyWords": "node.js, database, api, Javascript, backend, typescript",
+      "deliveryMethods": {
+        "classroom": true,
+        "distance": false
+      },
+      "image": " ",
+      "scheduledDates": [
+        {
+          "startDate": "2025-04-05",
+          "format": "classroom",
+          "availableSeats": 20
         }
       ]
     }
@@ -115,6 +157,14 @@
       "password": "123456",
       "phone": "0215487669",
       "address": "skhjgdskjhga"
+    },
+    {
+      "id": "10d2",
+      "name": "jasmine",
+      "email": "jasmine@test.com",
+      "password": "123456",
+      "phone": "0215874996",
+      "address": "sgag"
     }
   ],
   "bookings": [
@@ -128,6 +178,15 @@
       "format": "classroom"
     },
     {
+      "id": "02c1",
+      "userId": "6cf4",
+      "courseId": "1",
+      "sessionDate": "2025-02-15",
+      "bookingDate": "2025-02-03T20:38:35.812Z",
+      "status": "confirmed",
+      "format": "distance"
+    },
+    {
       "id": "a57e",
       "userId": "dbc1",
       "courseId": "2",
@@ -139,20 +198,20 @@
     {
       "id": "1fff",
       "userId": "dbc1",
-      "courseId": null,
+      "courseId": "1",
       "sessionDate": "2025-02-15",
       "bookingDate": "2025-02-03T20:45:39.293Z",
       "status": "confirmed",
       "format": "distance"
     },
     {
-      "id": "6fce",
+      "id": "0605",
       "userId": "6cf4",
-      "courseId": "5",
-      "sessionDate": "2025-02-20",
-      "bookingDate": "2025-02-04T15:16:32.356Z",
+      "courseId": "4",
+      "sessionDate": "2025-02-15",
+      "bookingDate": "2025-02-04T22:04:47.351Z",
       "status": "confirmed",
-      "format": "classroom"
+      "format": "distance"
     }
   ]
 }

@@ -1,24 +1,28 @@
 export interface Course {
-  id: string;
+  id?: string;
   title: string;
-  tagLine: string;
-  discription: string; // Note: keeping the typo as it exists in current data
+  description: string;
+  duration: number;
+  price: number;
   courseNumber: string;
-  durationDays: number;
-  keyWords: string;
-  deliveryMethods: {
-    classroom: boolean;
-    distance: boolean;
-  };
-  image: string;
-  scheduledDates: ScheduledDate[];
-  isDeleted?: boolean; // New field for soft deletion
+  status: 'Active' | 'Inactive';
+  formats?: string[];
+  scheduledDates?: ScheduledDate[];
+  enrollments?: StudentEnrollment[];
 }
 
 export interface ScheduledDate {
   startDate: string;
   format: 'classroom' | 'distance';
   availableSeats: number;
+}
+
+export interface StudentEnrollment {
+  studentName: string;
+  email: string;
+  phoneNumber: string;
+  enrolledDate: string;
+  format: 'classroom' | 'distance';
 }
 
 export interface User {
@@ -45,3 +49,11 @@ export interface Booking {
 export interface AdminCourseView extends Course {
   enrollmentCount: number;
 }
+
+export interface CourseHandlers {
+  onEdit: (id: string) => void;
+  onDelete: (id: string) => void;
+  onViewDetails: (id: string) => void;
+}
+
+export type PartialCourse = Partial<Course>;

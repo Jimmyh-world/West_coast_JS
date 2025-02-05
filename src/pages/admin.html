@@ -4,10 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Administration - WestCoast Education</title>
-    <!-- <link rel="stylesheet" href="../css/styles.css"> -->
-    <link rel="stylesheet" href="../css/admin.css">
-    <script type="module" src="../js/pages/admin.js" defer></script>
+    <title>Admin - WestCoast Education</title>
+    <link rel="stylesheet" href="/src/css/styles.css">
+    <link rel="stylesheet" href="/src/css/admin.css">
+    <!-- Use original JS files -->
+    <script type="module" src="/src/js/admin/courseManager.js"></script>
+    <script type="module" src="/src/js/admin/courseForm.js"></script>
+    <script type="module" src="/src/js/admin/courseDetails.js"></script>
 </head>
 
 <body>
@@ -34,8 +37,19 @@
                 </div>
             </div>
 
-            <div id="courseList" class="course-grid">
-                <!-- Courses will be loaded here -->
+            <!-- Add a flex container for the layout -->
+            <div class="admin-layout">
+                <!-- Course list on the left -->
+                <div id="courseList" class="course-grid">
+                    <!-- Courses will be loaded here -->
+                </div>
+
+                <!-- Course details on the right -->
+                <div id="courseDetails" class="course-details-panel">
+                    <div class="details-placeholder">
+                        Select a course to view details
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -48,6 +62,20 @@
                 <button class="close-button">&times;</button>
             </div>
             <form id="courseForm">
+                <div class="form-instructions">
+                    <h4>Course Information Guidelines</h4>
+                    <ul>
+                        <li><strong>Course Title:</strong> Clear, descriptive name (e.g., "Advanced React Development")
+                        </li>
+                        <li><strong>Course Number:</strong> Unique identifier (e.g., "REACT101")</li>
+                        <li><strong>Duration:</strong> Number of days the course runs</li>
+                        <li><strong>Price:</strong> Course price in SEK (numbers only)</li>
+                        <li><strong>Formats:</strong> Select all applicable teaching formats</li>
+                        <li><strong>Scheduled Dates:</strong> Add at least one course date with format and available
+                            seats</li>
+                    </ul>
+                </div>
+
                 <div class="form-group">
                     <label for="title">Course Title<span class="required">*</span></label>
                     <input type="text" id="title" name="title" required>
@@ -69,24 +97,32 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="durationDays">Duration (Days)<span class="required">*</span></label>
-                    <input type="number" id="durationDays" name="durationDays" min="1" required>
+                    <label for="duration">Duration (Days)<span class="required">*</span></label>
+                    <input type="number" id="duration" name="duration" min="1" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="keyWords">Keywords (comma separated)</label>
-                    <input type="text" id="keyWords" name="keyWords">
+                    <label for="price">Price<span class="required">*</span></label>
+                    <input type="number" id="price" name="price" min="0" required>
                 </div>
 
                 <div class="form-group">
-                    <label>Delivery Methods</label>
+                    <label for="status">Status<span class="required">*</span></label>
+                    <select id="status" name="status" required>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Formats</label>
                     <div class="checkbox-group">
                         <label class="checkbox-label">
-                            <input type="checkbox" name="deliveryMethods.classroom" id="classroom">
+                            <input type="checkbox" name="formats" value="classroom">
                             Classroom
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="deliveryMethods.distance" id="distance">
+                            <input type="checkbox" name="formats" value="distance">
                             Distance
                         </label>
                     </div>
@@ -94,12 +130,20 @@
 
                 <div class="form-group">
                     <label for="image">Image Filename</label>
-                    <input type="text" id="image" name="image">
+                    <div class="input-help">
+                        <input type="text" id="image" name="image" class="form-control"
+                            placeholder="e.g., react-course.jpg">
+                        <small class="help-text">
+                            Save image in images folder, <br>
+                            Recommended: Use descriptive names like 'react-course.jpg' or 'python-basics.png'.<br>
+                            Supported formats: JPG, PNG, WEBP
+                        </small>
+                    </div>
                 </div>
 
                 <div class="form-group scheduled-dates">
                     <label>Scheduled Dates</label>
-                    <div id="scheduledDatesContainer">
+                    <div id="scheduledDatesContainer" class="dates-container">
                         <!-- Dates will be added here dynamically -->
                     </div>
                     <button type="button" class="btn btn-secondary" id="addDateBtn">Add Date</button>

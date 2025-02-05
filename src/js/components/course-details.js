@@ -22,8 +22,8 @@ import {
   updateCourseSeats,
   checkExistingBooking,
 } from '../api/courseServices.js';
-import { courseUtils } from '../utilities/courseUtils.js';
-import { eventHandler } from '../utilities/eventHandler.js';
+import { courseUtils } from '../utils/courseUtils.js';
+import { eventHandler } from '../utils/eventHandler.js';
 
 class CourseDetailsManager {
   constructor(containerId) {
@@ -119,22 +119,24 @@ class CourseDetailsManager {
         format: selectedFormat,
       };
 
-      await createBooking(bookingData);
+      const result = await createBooking(bookingData);
+      if (result) {
+        const course = await getCourseById(this.courseId);
+        const sessionIndex = course.scheduledDates.findIndex(
+          (date) => date.startDate === sessionDate
+        );
 
-      const course = await getCourseById(this.courseId);
-      const sessionIndex = course.scheduledDates.findIndex(
-        (date) => date.startDate === sessionDate
-      );
+        if (sessionIndex !== -1) {
+          course.scheduledDates[sessionIndex].availableSeats--;
+          await updateCourseSeats(this.courseId, course);
+        }
 
-      if (sessionIndex !== -1) {
-        course.scheduledDates[sessionIndex].availableSeats--;
-        await updateCourseSeats(this.courseId, course);
+        alert('Course booked successfully!');
+        window.location.href = '/src/pages/my-page.html';
       }
-
-      alert('Course booked successfully!');
-      window.location.href = '/src/pages/my-page.html';
     } catch (error) {
-      alert(error.message || 'Failed to book the course. Please try again.');
+      console.error('Booking failed:', error);
+      alert('Failed to book the course: ' + error.message);
     }
   }
 
@@ -197,6 +199,7 @@ class CourseDetailsManager {
 
   generateSessionCard(date, hasExistingBooking) {
     const deliveryOptions = this.getDeliveryOptions(date);
+    const isLoggedIn = localStorage.getItem('user') !== null;
 
     return `
       <div class="session-card">
@@ -242,8 +245,12 @@ class CourseDetailsManager {
     const course = this.currentCourse;
     const options = [];
 
-    if (course.deliveryMethods.classroom) options.push('classroom');
-    if (course.deliveryMethods.distance) options.push('distance');
+    if (course && course.deliveryMethods) {
+      if (course.deliveryMethods.classroom) options.push('classroom');
+      if (course.deliveryMethods.distance) options.push('distance');
+    } else {
+      options.push('classroom', 'distance');
+    }
 
     return options;
   }
@@ -267,7 +274,5 @@ class CourseDetailsManager {
 }
 
 export function initCourseDetails(containerId) {
-  // Remove the separate updateBookingButton call since it's now handled
-  // within the CourseDetailsManager
   return new CourseDetailsManager(containerId);
 }

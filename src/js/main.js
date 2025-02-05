@@ -16,7 +16,7 @@
  */
 
 import { displayCourses } from './components/courseList.js';
-import { SearchManager } from './utilities/search.js';
+import { SearchManager } from './utils/search.js';
 import { initNavigation } from './components/navigation.js';
 
 // Ensure navigation is initialized immediately
