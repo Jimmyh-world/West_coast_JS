@@ -135,6 +135,40 @@ export class UIManager {
         }
       </div>
 
+      <div class="enrolled-students">
+        <h4>Enrolled Students</h4>
+        ${
+          course.enrolledStudents?.length
+            ? `
+            <table class="students-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Study Type</th>
+                  <th>Enrollment Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${course.enrolledStudents
+                  .map(
+                    (student) => `
+                  <tr>
+                    <td>${student.studentName}</td>
+                    <td>${student.email}</td>
+                    <td>${student.format}</td>
+                    <td>${formatDate(student.enrolledDate)}</td>
+                  </tr>
+                `
+                  )
+                  .join('')}
+              </tbody>
+            </table>
+            `
+            : '<p>No students enrolled</p>'
+        }
+      </div>
+
       <div class="course-description">
         <h4>Description</h4>
         <p>${course.discription}</p>

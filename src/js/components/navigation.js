@@ -46,6 +46,7 @@ export function initNavigation() {
         <li><a href="/index.html">Home</a></li>
         <li><a href="/src/pages/course-view.html">Courses</a></li>
         <li><a href="/src/pages/course-view.html?view=ondemand">On-Demand</a></li>
+        <li><a href="/src/pages/admin.html">Admin</a></li>
         <li><a href="/src/pages/about.html">About</a></li>
         <li><a href="/src/pages/contact.html">Contact</a></li>
         ${

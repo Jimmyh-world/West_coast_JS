@@ -12,6 +12,7 @@ export interface Course {
   };
   image: string;
   scheduledDates?: ScheduledDate[];
+  enrolledStudents?: EnrolledStudent[];
 }
 
 export interface ScheduledDate {
@@ -30,12 +31,10 @@ export interface StudentEnrollment {
 
 export interface User {
   id: string;
-  email: string;
-  password: string;
   name: string;
+  email: string;
   phone?: string;
   address?: string;
-  isAdmin?: boolean; // New field for admin role
 }
 
 export interface Booking {
@@ -44,7 +43,7 @@ export interface Booking {
   courseId: string;
   sessionDate: string;
   bookingDate: string;
-  status: 'confirmed' | 'cancelled' | 'pending';
+  status: 'confirmed' | 'pending' | 'cancelled';
   format: 'classroom' | 'distance';
 }
 
@@ -60,3 +59,11 @@ export interface CourseHandlers {
 }
 
 export type PartialCourse = Partial<Course>;
+
+export interface EnrolledStudent {
+  studentName: string;
+  email: string;
+  format: 'classroom' | 'distance';
+  enrolledDate: string;
+  phoneNumber?: string;
+}

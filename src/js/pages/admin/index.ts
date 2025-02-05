@@ -4,7 +4,8 @@ import { CourseService } from './courseService.js';
 import { NotificationManager } from './notificationManager.js';
 import { FormManager } from './formManager.js';
 import { UIManager } from './uiManager.js';
-import type { Course } from './types.js';
+import type { Course, Booking, User, EnrolledStudent } from './types.js';
+import API_CONFIG, { getApiUrl } from './constants.js';
 
 export class AdminPage {
   private currentCourseId: string | null = null;
@@ -16,6 +17,9 @@ export class AdminPage {
   private form: HTMLFormElement;
 
   constructor() {
+    // Show warning first
+    this.showWarningModal();
+
     const elements = this.initializeElements();
     this.modal = elements.modal;
     this.form = elements.form;
@@ -93,20 +97,58 @@ export class AdminPage {
     }
   }
 
-  private async handleViewDetails(courseId: string): Promise<void> {
+  private async loadCourseData(courseId: string): Promise<Course> {
     try {
-      const course = await this.courseService.fetchCourse(courseId);
-      this.uiManager.renderCourseDetails(course);
+      const courseResponse = await fetch(`${getApiUrl('COURSES')}/${courseId}`);
+      const course = (await courseResponse.json()) as Course;
+
+      const bookingsResponse = await fetch(
+        `${getApiUrl('BOOKINGS')}?courseId=${courseId}`
+      );
+      const bookings = (await bookingsResponse.json()) as Booking[];
+
+      const usersResponse = await fetch(getApiUrl('USERS'));
+      const users = (await usersResponse.json()) as User[];
+
+      const enrolledStudents = bookings
+        .filter((booking: Booking) => booking.status === 'confirmed')
+        .map((booking: Booking) => {
+          const user = users.find((u: User) => u.id === booking.userId);
+          return {
+            studentName: user?.name || 'Unknown',
+            email: user?.email || 'No email',
+            format: booking.format,
+            enrolledDate: booking.bookingDate,
+            phoneNumber: user?.phone,
+          } as EnrolledStudent;
+        });
+
+      return {
+        ...course,
+        enrolledStudents,
+      };
     } catch (error) {
-      console.error('Error loading course details:', error);
-      this.notificationManager.show('error', 'Failed to load course details');
+      throw new Error(`Failed to load course data: ${error}`);
     }
   }
 
   private async handleEdit(courseId: string): Promise<void> {
-    this.currentCourseId = courseId;
-    this.uiManager.showModal(true);
-    await this.loadCourseData(courseId);
+    try {
+      const courseData = await this.loadCourseData(courseId);
+      this.formManager.populateForm(courseData);
+      this.modal.style.display = 'block';
+    } catch (error) {
+      console.error('Error handling edit:', error);
+    }
+  }
+
+  private async handleViewDetails(courseId: string): Promise<void> {
+    try {
+      const courseData = await this.loadCourseData(courseId);
+      this.uiManager.renderCourseDetails(courseData);
+    } catch (error) {
+      console.error('Error handling view details:', error);
+    }
   }
 
   private async handleDelete(courseId: string): Promise<void> {
@@ -119,16 +161,6 @@ export class AdminPage {
         console.error('Error deleting course:', error);
         this.notificationManager.show('error', 'Failed to delete course');
       }
-    }
-  }
-
-  private async loadCourseData(courseId: string): Promise<void> {
-    try {
-      const course = await this.courseService.fetchCourse(courseId);
-      this.formManager.populateForm(course);
-    } catch (error) {
-      console.error('Error loading course data:', error);
-      this.notificationManager.show('error', 'Failed to load course data');
     }
   }
 
@@ -151,6 +183,21 @@ export class AdminPage {
       console.error('Error saving course:', error);
       this.notificationManager.show('error', 'Failed to save course');
     }
+  }
+
+  private showWarningModal(): void {
+    const modal = document.getElementById('warningModal') as HTMLElement;
+    const acknowledgeBtn = document.getElementById(
+      'acknowledgeBtn'
+    ) as HTMLElement;
+
+    // Show modal
+    modal.style.display = 'block';
+
+    // Close modal when button is clicked
+    acknowledgeBtn.onclick = () => {
+      modal.style.display = 'none';
+    };
   }
 }
 

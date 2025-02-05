@@ -92,15 +92,12 @@ export class FormManager {
    * @param course Course data to populate
    */
   populateForm(course: Course): void {
-    console.log('Populating form with course data:', course); // Debug log
-
     try {
-      // Set basic form fields
       this.setFormValue('title', course.title);
       this.setFormValue('tagLine', course.tagLine);
       this.setFormValue('discription', course.discription);
       this.setFormValue('courseNumber', course.courseNumber);
-      this.setFormValue('durationDays', course.durationDays?.toString() || ''); // Add null check
+      this.setFormValue('durationDays', course.durationDays?.toString() || '');
       this.setFormValue('keyWords', course.keyWords);
       this.setFormValue('image', course.image || '');
 
@@ -124,11 +121,8 @@ export class FormManager {
       if (course.scheduledDates && course.scheduledDates.length > 0) {
         course.scheduledDates.forEach((date) => this.addDateField(date));
       }
-
-      console.log('Form populated successfully'); // Debug log
     } catch (error) {
-      console.error('Error populating form:', error);
-      throw new Error('Failed to populate form with course data');
+      throw new Error(`Failed to populate form: ${error}`);
     }
   }
 

@@ -12,11 +12,32 @@
 </head>
 
 <body>
+    <!-- Add warning modal -->
+    <div id="warningModal" class="modal">
+        <div class="modal-content warning">
+            <h2>⚠️ Development Mode Notice</h2>
+            <p>This admin interface is currently accessible for demonstration purposes only.</p>
+            <p>In a production environment:</p>
+            <ul>
+                <li>This would be a separate, secure application</li>
+                <li>Require administrative credentials</li>
+                <li>Use secure authentication protocols</li>
+                <li>Include audit logging for all actions</li>
+            </ul>
+            <button id="acknowledgeBtn" class="btn btn-primary">I Understand</button>
+        </div>
+    </div>
+
     <header class="main-header">
-        <div class="container">
-            <div class="header-content">
+        <div class="admin-header">
+            <div class="header-left">
                 <h1>WestCoast Education</h1>
-                <span class="admin-badge">Admin Panel</span>
+                <h2>Admin Panel</h2>
+            </div>
+            <div class="header-right">
+                <a href="/index.html" class="btn btn-secondary">
+                    <span class="icon">🏠</span> Return to Main Site
+                </a>
             </div>
         </div>
     </header>
