@@ -22,8 +22,8 @@ import {
   updateCourseSeats,
   checkExistingBooking,
 } from '../api/courseServices.js';
-import { courseUtils } from '../utilities/courseUtils.js';
-import { eventHandler } from '../utilities/eventHandler.js';
+import { courseUtils } from '../utils/courseUtils.js';
+import { eventHandler } from '../utils/eventHandler.js';
 
 class CourseDetailsManager {
   constructor(containerId) {
@@ -43,17 +43,29 @@ class CourseDetailsManager {
 
     try {
       const course = await getCourseById(this.courseId);
-      await this.renderCourseWithBookingStatus(course);
+      // Check if the course is in userBookedCourses
+      const isBooked = window.userBookedCourses?.includes(
+        this.courseId.toString()
+      );
+      await this.renderCourseWithBookingStatus(course, isBooked);
     } catch (error) {
       courseUtils.handleError(error, this.container.id);
     }
   }
 
-  async renderCourseWithBookingStatus(course) {
+  async renderCourseWithBookingStatus(course, isBooked) {
     const userData = localStorage.getItem('user');
-    const hasExistingBooking = userData
-      ? await checkExistingBooking(JSON.parse(userData).id, this.courseId)
+    const userId = userData ? JSON.parse(userData).id : null;
+
+    console.log('User ID:', userId);
+    console.log('Course ID:', this.courseId);
+    console.log('User Booked Courses:', window.userBookedCourses);
+
+    const hasExistingBooking = userId
+      ? await checkExistingBooking(userId, this.courseId)
       : false;
+
+    console.log('Has Existing Booking:', hasExistingBooking);
 
     this.currentCourse = course;
     this.renderCourse(course, hasExistingBooking);
@@ -107,22 +119,24 @@ class CourseDetailsManager {
         format: selectedFormat,
       };
 
-      await createBooking(bookingData);
+      const result = await createBooking(bookingData);
+      if (result) {
+        const course = await getCourseById(this.courseId);
+        const sessionIndex = course.scheduledDates.findIndex(
+          (date) => date.startDate === sessionDate
+        );
 
-      const course = await getCourseById(this.courseId);
-      const sessionIndex = course.scheduledDates.findIndex(
-        (date) => date.startDate === sessionDate
-      );
+        if (sessionIndex !== -1) {
+          course.scheduledDates[sessionIndex].availableSeats--;
+          await updateCourseSeats(this.courseId, course);
+        }
 
-      if (sessionIndex !== -1) {
-        course.scheduledDates[sessionIndex].availableSeats--;
-        await updateCourseSeats(this.courseId, course);
+        alert('Course booked successfully!');
+        window.location.href = '/src/pages/my-page.html';
       }
-
-      alert('Course booked successfully!');
-      window.location.href = '/src/pages/my-page.html';
     } catch (error) {
-      alert(error.message || 'Failed to book the course. Please try again.');
+      console.error('Booking failed:', error);
+      alert('Failed to book the course: ' + error.message);
     }
   }
 
@@ -185,6 +199,7 @@ class CourseDetailsManager {
 
   generateSessionCard(date, hasExistingBooking) {
     const deliveryOptions = this.getDeliveryOptions(date);
+    const isLoggedIn = localStorage.getItem('user') !== null;
 
     return `
       <div class="session-card">
@@ -230,8 +245,12 @@ class CourseDetailsManager {
     const course = this.currentCourse;
     const options = [];
 
-    if (course.deliveryMethods.classroom) options.push('classroom');
-    if (course.deliveryMethods.distance) options.push('distance');
+    if (course && course.deliveryMethods) {
+      if (course.deliveryMethods.classroom) options.push('classroom');
+      if (course.deliveryMethods.distance) options.push('distance');
+    } else {
+      options.push('classroom', 'distance');
+    }
 
     return options;
   }

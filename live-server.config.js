@@ -1,6 +1,6 @@
 // live-server.config.js
 module.exports = {
-  port: 8080,
+  port: 5501,
   root: './',
   open: true,
   file: 'index.html',
@@ -8,8 +8,16 @@ module.exports = {
   mount: [['/node_modules', './node_modules']],
   middleware: [
     function (req, res, next) {
-      // Handle JavaScript files
-      if (req.url.endsWith('.js')) {
+      // Handle JavaScript modules
+      if (req.url.endsWith('.js') || req.url.endsWith('.mjs')) {
+        res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
+      }
+      // Handle TypeScript files
+      else if (req.url.endsWith('.ts')) {
+        res.setHeader('Content-Type', 'application/typescript; charset=UTF-8');
+      }
+      // Handle JavaScript modules specifically
+      else if (req.url.includes('/services/') || req.url.includes('/utils/')) {
         res.setHeader('Content-Type', 'application/javascript; charset=UTF-8');
       }
       // Handle JSON files

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - WestCoast Education</title>
+    <link rel="stylesheet" href="/src/css/styles.css">
+    <link rel="stylesheet" href="/src/css/admin.css">
+    <!-- Replace multiple JS files with our single entry point -->
+    <script type="module" src="/dist/js/pages/admin/index.js"></script>
+</head>
+
+<body>
+    <!-- Add warning modal -->
+    <div id="warningModal" class="modal">
+        <div class="modal-content warning">
+            <h2>⚠️ Development Mode Notice</h2>
+            <p>This admin interface is currently accessible for demonstration purposes only.</p>
+            <p>In a production environment:</p>
+            <ul>
+                <li>This would be a separate, secure application</li>
+                <li>Require administrative credentials</li>
+                <li>Use secure authentication protocols</li>
+                <li>Include audit logging for all actions</li>
+            </ul>
+            <button id="acknowledgeBtn" class="btn btn-primary">I Understand</button>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="admin-header">
+            <div class="header-left">
+                <h1>WestCoast Education</h1>
+                <h2>Admin Panel</h2>
+            </div>
+            <div class="header-right">
+                <a href="/index.html" class="btn btn-secondary">
+                    <span class="icon">🏠</span> Return to Main Site
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <div class="page-header">
+                <h2>Course Management</h2>
+                <div class="page-actions">
+                    <button id="createCourseBtn" class="btn btn-success">
+                        <span class="icon">+</span> Create New Course
+                    </button>
+                    <button id="refreshButton" class="btn btn-primary">
+                        <span class="icon">↻</span> Refresh
+                    </button>
+                </div>
+            </div>
+
+            <!-- Add a flex container for the layout -->
+            <div class="admin-layout">
+                <!-- Course list on the left -->
+                <div id="courseList" class="course-grid">
+                    <!-- Courses will be loaded here -->
+                </div>
+
+                <!-- Course details on the right -->
+                <div id="courseDetails" class="course-details-panel">
+                    <div class="details-placeholder">
+                        Select a course to view details
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Course Form Modal -->
+    <div id="courseFormModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Create New Course</h2>
+                <button class="close-button">&times;</button>
+            </div>
+            <form id="courseForm">
+                <div class="form-instructions">
+                    <h4>Course Information Guidelines</h4>
+                    <ul>
+                        <li><strong>Course Title:</strong> Clear, descriptive name (e.g., "Advanced React Development")
+                        </li>
+                        <li><strong>Tagline:</strong> Brief, catchy description of the course</li>
+                        <li><strong>Course Number:</strong> Unique identifier (e.g., "REACT101")</li>
+                        <li><strong>Description:</strong> Detailed course description</li>
+                        <li><strong>Duration:</strong> Number of days the course runs</li>
+                        <li><strong>Keywords:</strong> Relevant search terms (e.g., "React, JavaScript, Frontend")</li>
+                        <li><strong>Delivery Methods:</strong> Select all applicable teaching formats</li>
+                        <li><strong>Image:</strong> Course image filename (optional)</li>
+                        <li><strong>Scheduled Dates:</strong> Add at least one course date with format and available
+                            seats</li>
+                    </ul>
+                </div>
+
+                <div class="form-group">
+                    <label for="title">Course Title<span class="required">*</span></label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="tagLine">Tagline<span class="required">*</span></label>
+                    <input type="text" id="tagLine" name="tagLine" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="courseNumber">Course Number<span class="required">*</span></label>
+                    <input type="text" id="courseNumber" name="courseNumber" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="discription">Description<span class="required">*</span></label>
+                    <textarea id="discription" name="discription" rows="4" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="durationDays">Duration (Days)<span class="required">*</span></label>
+                    <input type="number" id="durationDays" name="durationDays" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="keyWords">Keywords<span class="required">*</span></label>
+                    <input type="text" id="keyWords" name="keyWords" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Delivery Methods</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="deliveryMethods" value="classroom">
+                            Classroom
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="deliveryMethods" value="distance">
+                            Distance
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="image">Image Filename</label>
+                    <div class="input-help">
+                        <input type="text" id="image" name="image" class="form-control"
+                            placeholder="e.g., react-course.jpg">
+                        <small class="help-text">
+                            Save image in images folder, <br>
+                            Recommended: Use descriptive names like 'react-course.jpg' or 'python-basics.png'.<br>
+                            Supported formats: JPG, PNG, WEBP
+                        </small>
+                    </div>
+                </div>
+
+                <div class="form-group scheduled-dates">
+                    <label>Scheduled Dates</label>
+                    <div id="scheduledDatesContainer" class="dates-container">
+                        <!-- Dates will be added here dynamically -->
+                    </div>
+                    <button type="button" class="btn btn-secondary" id="addDateBtn">Add Date</button>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelButton">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="saveButton">Save Course</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+    </footer>
+</body>
+
+</html>

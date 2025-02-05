@@ -25,18 +25,21 @@ export const courseUtils = {
     return new Date(dateString).toLocaleDateString();
   },
 
-  createDeliveryMethodBadges(deliveryMethods) {
+  createDeliveryMethodBadges(deliveryMethods = {}) {
     const badges = [];
 
-    if (deliveryMethods.classroom) {
+    if (deliveryMethods?.classroom) {
       badges.push('<span class="badge badge-classroom">Classroom</span>');
     }
 
-    if (deliveryMethods.distance) {
+    if (deliveryMethods?.distance) {
       badges.push('<span class="badge badge-distance">Distance</span>');
     }
 
-    return badges.join('');
+    return (
+      badges.join('') ||
+      '<span class="badge badge-default">Not specified</span>'
+    );
   },
 
   handleError(error, containerId) {

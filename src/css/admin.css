@@ -1,0 +1,517 @@
+/* Completely Redesigned Admin Panel CSS */
+
+:root {
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-background: #f8fafc;
+  --color-text: #334155;
+  --color-text-light: #64748b;
+  --border-radius: 10px;
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-background);
+  font-family: Arial, sans-serif;
+  color: var(--color-text);
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header Styling */
+.main-header {
+  background-color: white;
+  padding: 1rem;
+  box-shadow: var(--shadow-md);
+}
+
+/* Course Grid */
+.course-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 2rem 0;
+  justify-content: center;
+}
+
+.course-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  display: flex;
+  flex-direction: column;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.course-card.selected {
+  border-color: #0d6efd;
+  background-color: #f8f9fa;
+}
+
+/* Course Image */
+.course-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+}
+
+.course-content {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.course-card h3 {
+  margin: 0 0 0.5rem;
+  color: var(--color-primary-dark);
+  font-size: 1.4rem;
+}
+
+.course-info p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  color: var(--color-text-light);
+}
+
+/* Buttons */
+.card-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-top: 1px solid var(--color-text-light);
+}
+
+.btn {
+  flex: 1;
+  padding: 0.75rem 1.2rem;
+  border-radius: var(--border-radius);
+  font-weight: bold;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.btn-danger {
+  background-color: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .course-grid {
+    grid-template-columns: 1fr;
+  }
+  .card-actions {
+    flex-direction: column;
+  }
+}
+
+/* Modal styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  overflow-y: auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.modal.active {
+  display: block;
+}
+
+.modal-content {
+  position: relative;
+  background-color: #fff;
+  margin: 20px auto;
+  padding: 20px;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+/* Form styles */
+.form-group {
+  margin-bottom: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.form-group input[type='text'],
+.form-group input[type='number'],
+.form-group input[type='date'],
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Textarea specific sizing */
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Close button */
+.close-button {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  font-size: 1.5rem;
+  color: #6c757d;
+  background: none;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  transition: color 0.2s ease-in-out;
+}
+
+.close-button:hover {
+  color: #343a40;
+}
+
+/* Modal header */
+.modal-header {
+  margin: -20px -20px 20px -20px;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  border-radius: 5px 5px 0 0;
+}
+
+.modal-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.5rem;
+}
+
+/* Form actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #dee2e6;
+}
+
+/* Scheduled Dates Styling */
+.scheduled-date-field {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.date-inputs {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 1rem;
+  align-items: center;
+}
+
+.date-inputs input,
+.date-inputs select {
+  padding: 0.5rem;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  width: 100%;
+}
+
+.remove-date {
+  padding: 0.5rem 1rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.remove-date:hover {
+  background-color: #c82333;
+}
+
+#addDateBtn {
+  margin-top: 1rem;
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 1rem 2rem;
+  border-radius: 4px;
+  color: white;
+  z-index: 2000;
+  animation: slide-in 0.3s ease-out;
+}
+
+.notification.success {
+  background-color: #10b981;
+}
+
+.notification.error {
+  background-color: #ef4444;
+}
+
+.notification.fade-out {
+  animation: fade-out 0.3s ease-out;
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Form Instructions */
+.form-instructions {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-left: 4px solid #0d6efd;
+  border-radius: 4px;
+}
+
+.form-instructions h4 {
+  color: #0d6efd;
+  margin-bottom: 1rem;
+}
+
+.form-instructions ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.form-instructions li {
+  margin-bottom: 0.5rem;
+}
+
+.form-instructions strong {
+  color: #495057;
+}
+
+/* Input Help Text */
+.input-help {
+  position: relative;
+}
+
+.help-text {
+  display: block;
+  margin-top: 0.25rem;
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.form-control:focus + .help-text {
+  color: #0d6efd;
+}
+
+.admin-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.course-details-panel {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+  position: sticky;
+  top: 2rem;
+}
+
+.overview-details p {
+  margin-bottom: 0.5rem;
+}
+
+.session-detail {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.details-placeholder {
+  color: #6c757d;
+  text-align: center;
+  padding: 3rem;
+  font-style: italic;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.enrollments-list {
+  list-style: none;
+  padding: 0;
+}
+
+.enrollment-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.enrolled-students {
+  margin: 20px 0;
+}
+
+.students-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.students-table th,
+.students-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.students-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.students-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.students-table td:first-child {
+  font-weight: 500;
+}
+
+.student-card {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  border-left: 4px solid #0d6efd;
+  transition: transform 0.2s ease;
+}
+
+.student-card:hover {
+  transform: translateX(4px);
+}
+
+.student-info p {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.student-info p:last-child {
+  margin-bottom: 0;
+}
+
+.student-info strong {
+  color: #495057;
+  min-width: 80px;
+  display: inline-block;
+}
+
+/* Warning Modal Styles */
+.modal.warning .modal-content {
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 500px;
+}
+
+.modal.warning h2 {
+  color: #856404;
+  margin-bottom: 15px;
+}
+
+.modal.warning p {
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.modal.warning ul {
+  margin: 15px 0;
+  padding-left: 20px;
+}
+
+.modal.warning li {
+  color: #666;
+  margin-bottom: 5px;
+}
+
+#acknowledgeBtn {
+  margin-top: 15px;
+  width: 100%;
+}

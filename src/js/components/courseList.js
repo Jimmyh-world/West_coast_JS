@@ -16,10 +16,11 @@
  */
 
 import { getCourses } from '../api/courseServices.js';
-import { courseUtils } from '../utilities/courseUtils.js';
+import { courseUtils } from '../utils/courseUtils.js';
 
 export function createCourseCard(course, isBookingView = false) {
   const imagePath = courseUtils.getImagePath(course);
+  const deliveryMethods = course.deliveryMethods || {};
 
   return `
     <article class="course-card">
@@ -29,12 +30,12 @@ export function createCourseCard(course, isBookingView = false) {
            onerror="this.src='/src/images/placeholder.webp'">
       <div class="course-content">
         <h3>${course.title}</h3>
-        <p class="tagline">${course.tagLine}</p>
+        <p class="tagline">${course.tagLine || ''}</p>
         <div class="delivery-methods">
-          ${courseUtils.createDeliveryMethodBadges(course.deliveryMethods)}
+          ${courseUtils.createDeliveryMethodBadges(deliveryMethods)}
         </div>
         <div class="course-meta">
-          <span class="duration">${course.durationDays} days</span>
+          <span class="duration">${course.durationDays || 'N/A'} days</span>
         </div>
         ${
           !isBookingView
@@ -50,7 +51,7 @@ export function createCourseCard(course, isBookingView = false) {
   `;
 }
 
-export async function displayCourses(containerId, options = {}) {
+export const displayCourses = async (containerId, options = {}) => {
   const container = document.getElementById(containerId);
   if (!container) throw new Error(`Container ${containerId} not found`);
 
@@ -69,17 +70,19 @@ export async function displayCourses(containerId, options = {}) {
   } catch (error) {
     courseUtils.handleError(error, containerId);
   }
-}
+};
 
 function filterCourses(courses, filter) {
   if (!filter) return courses;
 
   return courses.filter((course) => {
+    const deliveryMethods = course.deliveryMethods || {};
+
     switch (filter) {
       case 'classroom':
-        return course.deliveryMethods.classroom;
+        return deliveryMethods.classroom || false;
       case 'distance':
-        return course.deliveryMethods.distance;
+        return deliveryMethods.distance || false;
       default:
         return true;
     }

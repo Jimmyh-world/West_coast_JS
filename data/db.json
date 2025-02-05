@@ -38,7 +38,7 @@
         {
           "startDate": "2025-03-15",
           "format": "classroom",
-          "availableSeats": 13
+          "availableSeats": 12
         }
       ]
     },
@@ -80,7 +80,7 @@
         {
           "startDate": "2025-02-15",
           "format": "classroom",
-          "availableSeats": 13
+          "availableSeats": 12
         }
       ]
     },
@@ -101,7 +101,7 @@
         {
           "startDate": "2025-04-05",
           "format": "classroom",
-          "availableSeats": 20
+          "availableSeats": 18
         }
       ]
     },
@@ -122,7 +122,7 @@
         {
           "startDate": "2025-04-05",
           "format": "classroom",
-          "availableSeats": 20
+          "availableSeats": 19
         }
       ]
     }
@@ -157,6 +157,14 @@
       "password": "123456",
       "phone": "0215487669",
       "address": "skhjgdskjhga"
+    },
+    {
+      "id": "10d2",
+      "name": "jasmine",
+      "email": "jasmine@test.com",
+      "password": "123456",
+      "phone": "0215874996",
+      "address": "sgag"
     }
   ],
   "bookings": [
@@ -195,6 +203,51 @@
       "bookingDate": "2025-02-03T20:45:39.293Z",
       "status": "confirmed",
       "format": "distance"
+    },
+    {
+      "id": "0605",
+      "userId": "6cf4",
+      "courseId": "4",
+      "sessionDate": "2025-02-15",
+      "bookingDate": "2025-02-04T22:04:47.351Z",
+      "status": "confirmed",
+      "format": "distance"
+    },
+    {
+      "id": "02eb",
+      "userId": "10d2",
+      "courseId": "2",
+      "sessionDate": "2025-03-15",
+      "bookingDate": "2025-02-05T10:16:18.372Z",
+      "status": "confirmed",
+      "format": "classroom"
+    },
+    {
+      "id": "9bc6",
+      "userId": "10d2",
+      "courseId": "6",
+      "sessionDate": "2025-04-05",
+      "bookingDate": "2025-02-05T10:16:23.054Z",
+      "status": "confirmed",
+      "format": "classroom"
+    },
+    {
+      "id": "405a",
+      "userId": "10d2",
+      "courseId": "5",
+      "sessionDate": "2025-04-05",
+      "bookingDate": "2025-02-05T10:16:29.969Z",
+      "status": "confirmed",
+      "format": "classroom"
+    },
+    {
+      "id": "726f",
+      "userId": "6cf4",
+      "courseId": "5",
+      "sessionDate": "2025-04-05",
+      "bookingDate": "2025-02-05T13:07:33.046Z",
+      "status": "confirmed",
+      "format": "classroom"
     }
   ]
 }
