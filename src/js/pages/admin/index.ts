@@ -1,3 +1,5 @@
+console.log('Admin Page Module Loaded');
+
 import { CourseService } from './courseService.js';
 import { NotificationManager } from './notificationManager.js';
 import { FormManager } from './formManager.js';

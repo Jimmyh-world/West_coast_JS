@@ -6,12 +6,13 @@
   "type": "module",
   "scripts": {
     "start": "json-server --watch data/db.json",
+    "clean": "rm -rf dist/",
+    "build": "npm run clean && tsc",
     "dev": "concurrently \"npm run watch\" \"live-server --config=live-server.config.js\"",
+    "watch": "tsc --watch",
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
-    "tsc": "tsc --noEmit",
-    "build": "tsc",
-    "watch": "tsc --watch"
+    "tsc": "tsc --noEmit"
   },
   "repository": {
     "type": "git",

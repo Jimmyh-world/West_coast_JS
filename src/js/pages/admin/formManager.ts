@@ -1,3 +1,5 @@
+console.log('Form Manager Module Loaded');
+
 import type { Course, ScheduledDate } from './types.js';
 
 export class FormManager {
@@ -13,40 +15,76 @@ export class FormManager {
    * @returns Course object with all form data
    */
   getFormData(): Course {
+    console.log('Getting form data...'); // Debug log
     const formData = new FormData(this.form);
-    const scheduledDates = this.getScheduledDates();
 
-    // Get form values matching db.json structure
-    const title = formData.get('title') as string;
-    const tagLine = formData.get('tagLine') as string;
-    const discription = formData.get('description') as string; // Note field name difference
-    const courseNumber = formData.get('courseNumber') as string;
-    const durationDays = Number(formData.get('duration'));
-    const keyWords = formData.get('keyWords') as string;
-    const image = formData.get('image') as string;
+    // Debug logs to see what we're getting from the form
+    console.log('Form data entries:', Object.fromEntries(formData.entries()));
+
+    const scheduledDates = this.getScheduledDates();
+    console.log('Scheduled dates:', scheduledDates); // Debug log
 
     // Get checkbox values for delivery methods
-    const classroom = formData.get('formats')?.includes('classroom') || false;
-    const distance = formData.get('formats')?.includes('distance') || false;
+    const deliveryMethodInputs = this.form.querySelectorAll<HTMLInputElement>(
+      'input[name="deliveryMethods"]'
+    );
+    const deliveryMethods = {
+      classroom: false,
+      distance: false,
+    };
 
-    if (!title || !courseNumber || !tagLine || isNaN(durationDays)) {
+    deliveryMethodInputs.forEach((input) => {
+      console.log(`Delivery method ${input.value}:`, input.checked); // Debug log
+      if (input.checked) {
+        deliveryMethods[input.value as 'classroom' | 'distance'] = true;
+      }
+    });
+
+    // Get all form values with explicit type checking
+    const title = formData.get('title') as string | null;
+    const tagLine = formData.get('tagLine') as string | null;
+    const discription = formData.get('discription') as string | null;
+    const courseNumber = formData.get('courseNumber') as string | null;
+    const durationDaysValue = formData.get('durationDays');
+    const keyWords = formData.get('keyWords') as string | null;
+    const image = formData.get('image') as string | null;
+
+    console.log('Duration days value:', durationDaysValue); // Debug log
+
+    // Validate and convert durationDays
+    const durationDays = durationDaysValue ? Number(durationDaysValue) : 0;
+    if (isNaN(durationDays)) {
+      console.error('Invalid duration value:', durationDaysValue);
+      throw new Error('Duration must be a valid number');
+    }
+
+    const courseData: Course = {
+      title: title || '',
+      tagLine: tagLine || '',
+      discription: discription || '',
+      courseNumber: courseNumber || '',
+      durationDays,
+      keyWords: keyWords || '',
+      image: image || '',
+      deliveryMethods,
+      scheduledDates,
+    };
+
+    console.log('Final course data:', courseData); // Debug log
+
+    // Validate required fields
+    if (
+      !courseData.title ||
+      !courseData.courseNumber ||
+      !courseData.tagLine ||
+      !courseData.discription ||
+      courseData.durationDays <= 0
+    ) {
+      console.error('Validation failed:', courseData);
       throw new Error('Please fill in all required fields');
     }
 
-    return {
-      title,
-      tagLine,
-      discription,
-      courseNumber,
-      durationDays,
-      keyWords,
-      image,
-      deliveryMethods: {
-        classroom,
-        distance,
-      },
-      scheduledDates,
-    };
+    return courseData;
   }
 
   /**
@@ -54,30 +92,44 @@ export class FormManager {
    * @param course Course data to populate
    */
   populateForm(course: Course): void {
-    // Set basic form fields
-    this.setFormValue('title', course.title);
-    this.setFormValue('tagLine', course.tagLine);
-    this.setFormValue('description', course.discription); // Note field name difference
-    this.setFormValue('courseNumber', course.courseNumber);
-    this.setFormValue('duration', course.durationDays.toString());
-    this.setFormValue('keyWords', course.keyWords);
-    this.setFormValue('image', course.image);
+    console.log('Populating form with course data:', course); // Debug log
 
-    // Set delivery method checkboxes
-    const classroomCheckbox = this.form.querySelector(
-      '[value="classroom"]'
-    ) as HTMLInputElement;
-    const distanceCheckbox = this.form.querySelector(
-      '[value="distance"]'
-    ) as HTMLInputElement;
-    if (classroomCheckbox)
-      classroomCheckbox.checked = course.deliveryMethods.classroom;
-    if (distanceCheckbox)
-      distanceCheckbox.checked = course.deliveryMethods.distance;
+    try {
+      // Set basic form fields
+      this.setFormValue('title', course.title);
+      this.setFormValue('tagLine', course.tagLine);
+      this.setFormValue('discription', course.discription);
+      this.setFormValue('courseNumber', course.courseNumber);
+      this.setFormValue('durationDays', course.durationDays?.toString() || ''); // Add null check
+      this.setFormValue('keyWords', course.keyWords);
+      this.setFormValue('image', course.image || '');
 
-    // Clear and repopulate scheduled dates
-    this.clearScheduledDates();
-    course.scheduledDates?.forEach((date) => this.addDateField(date));
+      // Set delivery method checkboxes
+      const classroomCheckbox = this.form.querySelector(
+        'input[value="classroom"]'
+      ) as HTMLInputElement;
+      const distanceCheckbox = this.form.querySelector(
+        'input[value="distance"]'
+      ) as HTMLInputElement;
+
+      if (classroomCheckbox) {
+        classroomCheckbox.checked = course.deliveryMethods?.classroom || false;
+      }
+      if (distanceCheckbox) {
+        distanceCheckbox.checked = course.deliveryMethods?.distance || false;
+      }
+
+      // Clear and repopulate scheduled dates
+      this.clearScheduledDates();
+      if (course.scheduledDates && course.scheduledDates.length > 0) {
+        course.scheduledDates.forEach((date) => this.addDateField(date));
+      }
+
+      console.log('Form populated successfully'); // Debug log
+    } catch (error) {
+      console.error('Error populating form:', error);
+      throw new Error('Failed to populate form with course data');
+    }
   }
 
   /**
@@ -121,7 +173,7 @@ export class FormManager {
         <input type="number" 
                class="form-control" 
                name="availableSeats" 
-               placeholder="Seats" 
+               placeholder="Available Seats" 
                value="${date?.availableSeats || ''}" 
                min="1"
                required>
@@ -131,9 +183,12 @@ export class FormManager {
     `;
 
     // Add remove button handler
-    dateField.querySelector('.remove-date')?.addEventListener('click', () => {
-      dateContainer.removeChild(dateField);
-    });
+    const removeButton = dateField.querySelector('.remove-date');
+    if (removeButton) {
+      removeButton.addEventListener('click', () => {
+        dateContainer.removeChild(dateField);
+      });
+    }
 
     dateContainer.appendChild(dateField);
   }
@@ -160,10 +215,15 @@ export class FormManager {
    * Helper to set form field values
    */
   private setFormValue(name: string, value: string): void {
+    console.log(`Setting ${name} to:`, value); // Debug log
     const element = this.form.querySelector(
       `[name="${name}"]`
-    ) as HTMLInputElement;
-    if (element) element.value = value;
+    ) as HTMLInputElement | null;
+    if (element) {
+      element.value = value;
+    } else {
+      console.warn(`Form element with name "${name}" not found`); // Debug log
+    }
   }
 
   /**
@@ -171,6 +231,8 @@ export class FormManager {
    */
   private clearScheduledDates(): void {
     const dateContainer = this.form.querySelector('#scheduledDatesContainer');
-    if (dateContainer) dateContainer.innerHTML = '';
+    if (dateContainer) {
+      dateContainer.innerHTML = '';
+    }
   }
 }

@@ -1,3 +1,5 @@
+console.log('UI Manager Module Loaded');
+
 import type { Course, CourseHandlers } from './types.js';
 
 export class UIManager {
@@ -36,11 +38,13 @@ export class UIManager {
         <div class="course-details">
           <p>Course Number: ${course.courseNumber}</p>
           <p>Duration: ${
-            course.duration ? `${course.duration} days` : 'Not specified'
+            course.durationDays
+              ? `${course.durationDays} days`
+              : 'Not specified'
           }</p>
-          <p>Status: ${course.status || 'Draft'}</p>
+          <p>Tagline: ${course.tagLine || 'No tagline'}</p>
         </div>
-        <div class="course-actions">
+        <div class="course-actions"></div>
           <button class="btn btn-info view-details-btn" data-course-id="${
             course.id
           }">View Details</button>
@@ -100,11 +104,14 @@ export class UIManager {
         <h3>${course.title}</h3>
         <div class="overview-details">
           <p><strong>Course Number:</strong> ${course.courseNumber}</p>
-          <p><strong>Duration:</strong> ${course.duration} days</p>
-          <p><strong>Price:</strong> ${course.price} SEK</p>
-          <p><strong>Status:</strong> ${course.status}</p>
-          <p><strong>Formats:</strong> ${
-            course.formats?.join(', ') || 'None specified'
+          <p><strong>Duration:</strong> ${course.durationDays} days</p>
+          <p><strong>Tagline:</strong> ${course.tagLine}</p>
+          <p><strong>Keywords:</strong> ${course.keyWords}</p>
+          <p><strong>Delivery Methods:</strong> ${
+            Object.entries(course.deliveryMethods)
+              .filter(([_, enabled]) => enabled)
+              .map(([method]) => method)
+              .join(', ') || 'None specified'
           }</p>
         </div>
       </div>
@@ -128,38 +135,9 @@ export class UIManager {
         }
       </div>
 
-      <div class="enrolled-students">
-        <h4>Enrolled Students</h4>
-        ${
-          course.enrollments?.length
-            ? `
-          <div class="students-list">
-            ${course.enrollments
-              .map(
-                (student) => `
-              <div class="student-card">
-                <div class="student-info">
-                  <p><strong>Name:</strong> ${student.studentName}</p>
-                  <p><strong>Email:</strong> ${student.email}</p>
-                  <p><strong>Phone:</strong> ${student.phoneNumber}</p>
-                  <p><strong>Format:</strong> ${student.format}</p>
-                  <p><strong>Enrolled:</strong> ${formatDate(
-                    student.enrolledDate
-                  )}</p>
-                </div>
-              </div>
-            `
-              )
-              .join('')}
-          </div>
-        `
-            : '<p>No students enrolled yet</p>'
-        }
-      </div>
-
       <div class="course-description">
         <h4>Description</h4>
-        <p>${course.description}</p>
+        <p>${course.discription}</p>
       </div>
     `;
   }

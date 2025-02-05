@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import type { Course } from '../types.js';
+import type { Course } from '../types';
 import { AdminPage } from '../index.js';
 
 describe('AdminPage', () => {
@@ -8,15 +8,19 @@ describe('AdminPage', () => {
   const mockCourse: Course = {
     id: '1',
     title: 'Test Course',
-    description: 'Test Description',
-    duration: 30,
-    price: 299.99,
+    tagLine: 'Test Tagline',
+    discription: 'Test Description',
     courseNumber: 'TEST101',
-    status: 'Active',
-    formats: ['classroom', 'distance'],
+    durationDays: 30,
+    keyWords: 'test, course',
+    deliveryMethods: {
+      classroom: true,
+      distance: false,
+    },
+    image: 'test.jpg',
     scheduledDates: [
       {
-        startDate: '2024-01-01',
+        startDate: '2025-01-01',
         format: 'classroom',
         availableSeats: 20,
       },
@@ -56,19 +60,17 @@ describe('AdminPage', () => {
   it('should handle course creation', async () => {
     const course: Course = {
       title: 'New Course',
-      description: 'Course Description',
-      duration: 5,
-      price: 199.99,
-      courseNumber: 'CS101',
-      status: 'Active',
-      formats: ['classroom'],
-      scheduledDates: [
-        {
-          startDate: '2024-01-01',
-          format: 'classroom',
-          availableSeats: 20,
-        },
-      ],
+      tagLine: 'New Course Tagline',
+      discription: 'Course Description',
+      courseNumber: 'NEW101',
+      durationDays: 20,
+      keyWords: 'new, course',
+      deliveryMethods: {
+        classroom: true,
+        distance: true,
+      },
+      image: 'new-course.jpg',
+      scheduledDates: [],
     };
 
     // Test implementation
@@ -78,9 +80,9 @@ describe('AdminPage', () => {
     const updatedCourse: Course = {
       ...mockCourse,
       title: 'Updated Course',
-      description: 'Updated Description',
-      duration: 7,
-      price: 399.99,
+      tagLine: 'Updated Tagline',
+      discription: 'Updated Description',
+      durationDays: 25,
     };
 
     // Test implementation

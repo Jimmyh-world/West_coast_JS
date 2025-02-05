@@ -65,10 +65,13 @@
                     <ul>
                         <li><strong>Course Title:</strong> Clear, descriptive name (e.g., "Advanced React Development")
                         </li>
+                        <li><strong>Tagline:</strong> Brief, catchy description of the course</li>
                         <li><strong>Course Number:</strong> Unique identifier (e.g., "REACT101")</li>
+                        <li><strong>Description:</strong> Detailed course description</li>
                         <li><strong>Duration:</strong> Number of days the course runs</li>
-                        <li><strong>Price:</strong> Course price in SEK (numbers only)</li>
-                        <li><strong>Formats:</strong> Select all applicable teaching formats</li>
+                        <li><strong>Keywords:</strong> Relevant search terms (e.g., "React, JavaScript, Frontend")</li>
+                        <li><strong>Delivery Methods:</strong> Select all applicable teaching formats</li>
+                        <li><strong>Image:</strong> Course image filename (optional)</li>
                         <li><strong>Scheduled Dates:</strong> Add at least one course date with format and available
                             seats</li>
                     </ul>
@@ -90,37 +93,29 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="description">Description<span class="required">*</span></label>
-                    <textarea id="description" name="description" rows="4" required></textarea>
+                    <label for="discription">Description<span class="required">*</span></label>
+                    <textarea id="discription" name="discription" rows="4" required></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label for="duration">Duration (Days)<span class="required">*</span></label>
-                    <input type="number" id="duration" name="duration" min="1" required>
+                    <label for="durationDays">Duration (Days)<span class="required">*</span></label>
+                    <input type="number" id="durationDays" name="durationDays" min="1" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="price">Price<span class="required">*</span></label>
-                    <input type="number" id="price" name="price" min="0" required>
+                    <label for="keyWords">Keywords<span class="required">*</span></label>
+                    <input type="text" id="keyWords" name="keyWords" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="status">Status<span class="required">*</span></label>
-                    <select id="status" name="status" required>
-                        <option value="Active">Active</option>
-                        <option value="Inactive">Inactive</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Formats</label>
+                    <label>Delivery Methods</label>
                     <div class="checkbox-group">
                         <label class="checkbox-label">
-                            <input type="checkbox" name="formats" value="classroom">
+                            <input type="checkbox" name="deliveryMethods" value="classroom">
                             Classroom
                         </label>
                         <label class="checkbox-label">
-                            <input type="checkbox" name="formats" value="distance">
+                            <input type="checkbox" name="deliveryMethods" value="distance">
                             Distance
                         </label>
                     </div>
