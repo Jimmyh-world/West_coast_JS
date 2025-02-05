@@ -16,25 +16,35 @@ export class FormManager {
     const formData = new FormData(this.form);
     const scheduledDates = this.getScheduledDates();
 
-    // Validate required fields
+    // Get form values matching db.json structure
     const title = formData.get('title') as string;
-    const description = (formData.get('description') as string) || '';
+    const tagLine = formData.get('tagLine') as string;
+    const discription = formData.get('description') as string; // Note field name difference
     const courseNumber = formData.get('courseNumber') as string;
-    const duration = Number(formData.get('duration'));
-    const price = Number(formData.get('price'));
+    const durationDays = Number(formData.get('duration'));
+    const keyWords = formData.get('keyWords') as string;
+    const image = formData.get('image') as string;
 
-    if (!title || !courseNumber || isNaN(duration) || isNaN(price)) {
+    // Get checkbox values for delivery methods
+    const classroom = formData.get('formats')?.includes('classroom') || false;
+    const distance = formData.get('formats')?.includes('distance') || false;
+
+    if (!title || !courseNumber || !tagLine || isNaN(durationDays)) {
       throw new Error('Please fill in all required fields');
     }
 
     return {
       title,
-      description,
+      tagLine,
+      discription,
       courseNumber,
-      duration,
-      price,
-      status: formData.get('status') as 'Active' | 'Inactive',
-      formats: formData.getAll('formats') as string[],
+      durationDays,
+      keyWords,
+      image,
+      deliveryMethods: {
+        classroom,
+        distance,
+      },
       scheduledDates,
     };
   }
@@ -44,36 +54,30 @@ export class FormManager {
    * @param course Course data to populate
    */
   populateForm(course: Course): void {
-    const {
-      title,
-      description = '',
-      courseNumber,
-      duration,
-      price,
-      status,
-      formats = [],
-      scheduledDates = [],
-    } = course;
-
     // Set basic form fields
-    this.setFormValue('title', title);
-    this.setFormValue('description', description);
-    this.setFormValue('courseNumber', courseNumber);
-    this.setFormValue('duration', duration.toString());
-    this.setFormValue('price', price.toString());
-    this.setFormValue('status', status);
+    this.setFormValue('title', course.title);
+    this.setFormValue('tagLine', course.tagLine);
+    this.setFormValue('description', course.discription); // Note field name difference
+    this.setFormValue('courseNumber', course.courseNumber);
+    this.setFormValue('duration', course.durationDays.toString());
+    this.setFormValue('keyWords', course.keyWords);
+    this.setFormValue('image', course.image);
 
-    // Set formats checkboxes
-    formats.forEach((format) => {
-      const checkbox = this.form.querySelector(
-        `[name="formats"][value="${format}"]`
-      ) as HTMLInputElement;
-      if (checkbox) checkbox.checked = true;
-    });
+    // Set delivery method checkboxes
+    const classroomCheckbox = this.form.querySelector(
+      '[value="classroom"]'
+    ) as HTMLInputElement;
+    const distanceCheckbox = this.form.querySelector(
+      '[value="distance"]'
+    ) as HTMLInputElement;
+    if (classroomCheckbox)
+      classroomCheckbox.checked = course.deliveryMethods.classroom;
+    if (distanceCheckbox)
+      distanceCheckbox.checked = course.deliveryMethods.distance;
 
     // Clear and repopulate scheduled dates
     this.clearScheduledDates();
-    scheduledDates.forEach((date) => this.addDateField(date));
+    course.scheduledDates?.forEach((date) => this.addDateField(date));
   }
 
   /**

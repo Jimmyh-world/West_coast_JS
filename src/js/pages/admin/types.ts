@@ -1,14 +1,17 @@
 export interface Course {
   id?: string;
   title: string;
-  description: string;
-  duration: number;
-  price: number;
+  tagLine: string;
+  discription: string;
   courseNumber: string;
-  status: 'Active' | 'Inactive';
-  formats?: string[];
+  durationDays: number;
+  keyWords: string;
+  deliveryMethods: {
+    classroom: boolean;
+    distance: boolean;
+  };
+  image: string;
   scheduledDates?: ScheduledDate[];
-  enrollments?: StudentEnrollment[];
 }
 
 export interface ScheduledDate {
